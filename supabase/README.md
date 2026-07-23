@@ -64,3 +64,17 @@ Après toute modification du schéma :
 supabase gen types typescript --project-id <ref> --schema public \
   > src/lib/database.types.ts
 ```
+
+## Stockage des photos (PMU)
+
+Les photos clientes (données sensibles) sont stockées dans **Supabase Storage
+(UE)**, dans un bucket **privé** `photos-clientes`, servies par **URL signée**
+à durée limitée (jamais de lien public — C10.2).
+
+À créer une fois dans le dashboard Supabase (Storage → New bucket) :
+- nom : `photos-clientes`
+- **Public : non** (privé)
+
+Les uploads passent par des URL signées générées côté serveur (clé service
+role) ; la lecture par des URL signées d'une heure. Chemin :
+`<etablissement_id>/<client_id>/<fiche_id>/<type>-<timestamp>.jpg`.

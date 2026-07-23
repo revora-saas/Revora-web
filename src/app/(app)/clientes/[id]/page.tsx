@@ -21,6 +21,9 @@ export default async function PageFicheCliente({
     .maybeSingle();
   if (!cliente) notFound();
 
+  // Journalisation de l'accès aux données de santé (C8.2), best-effort.
+  await ctx.supabase.rpc("logger_acces_sante", { p_client_id: id });
+
   // Historique des rendez-vous + libellés de prestations associés.
   const { data: rdv } = await ctx.supabase
     .from("rendez_vous")

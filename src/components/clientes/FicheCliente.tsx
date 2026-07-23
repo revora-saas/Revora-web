@@ -18,6 +18,7 @@ import { STATUTS, formaterTelephone, calculerCompletude } from "@/lib/clientes-u
 import { cn } from "@/lib/utils";
 import type { Tables } from "@/lib/database.types";
 import { majCliente, anonymiserClienteAction, corrigerFiabilite } from "@/app/(app)/clientes/actions";
+import { creerSeance } from "@/app/(app)/clientes/seance-actions";
 
 type Cliente = Tables<"clients">;
 
@@ -173,7 +174,7 @@ export function FicheCliente({
         <OngletProfil cliente={cliente} onModifier={() => setEdition(true)} />
       )}
       {onglet === "historique" && <OngletHistorique historique={historique} />}
-      {onglet === "technique" && <OngletTechnique fiches={fiches} />}
+      {onglet === "technique" && <OngletTechnique clientId={cliente.id} fiches={fiches} />}
       {onglet === "photos" && <OngletPhotos photos={photos} />}
       {onglet === "notes" && (
         <OngletNotes cliente={cliente} onModifier={() => setEdition(true)} />
@@ -420,40 +421,61 @@ function OngletHistorique({ historique }: { historique: RdvHisto[] }) {
   );
 }
 
-function OngletTechnique({ fiches }: { fiches: Fiche[] }) {
-  if (fiches.length === 0)
-    return <VideOnglet texte="Aucune fiche technique enregistrée." />;
+function OngletTechnique({ clientId, fiches }: { clientId: string; fiches: Fiche[] }) {
+  const router = useRouter();
+  const [chargement, setChargement] = useState(false);
+
+  async function nouvelle() {
+    setChargement(true);
+    const res = await creerSeance(clientId);
+    setChargement(false);
+    if (res.ok && res.id) router.push(`/clientes/${clientId}/seance/${res.id}`);
+  }
+
   return (
-    <ul className="flex flex-col gap-3">
-      {fiches.map((f) => {
-        const donnees = (f.donnees ?? {}) as Record<string, unknown>;
-        return (
-          <li
-            key={f.id}
-            className="rounded-[var(--radius-lg)] border border-perle bg-white p-4"
-          >
-            <p className="mb-2 text-xs text-ink/50">
-              {new Date(f.cree_le).toLocaleDateString("fr-FR")}
-              {f.numero_seance ? ` · Séance n°${f.numero_seance}` : ""}
-            </p>
-            {Object.entries(donnees).length === 0 ? (
-              <p className="text-sm text-ink/40">Aucune donnée.</p>
-            ) : (
-              <div className="flex flex-col gap-1">
-                {Object.entries(donnees).map(([k, v]) => (
-                  <div key={k} className="flex justify-between gap-4 text-sm">
-                    <span className="text-ink/50">{k}</span>
-                    <span className="text-right font-medium text-ink">
-                      {Array.isArray(v) ? v.join(", ") : String(v)}
-                    </span>
-                  </div>
-                ))}
-              </div>
-            )}
-          </li>
-        );
-      })}
-    </ul>
+    <div className="flex flex-col gap-3">
+      <div className="flex items-center justify-between">
+        <Link
+          href={`/clientes/${clientId}/dossier`}
+          className="text-sm font-medium text-primary hover:underline"
+        >
+          Dossier prêt contrôle
+        </Link>
+        <Button taille="sm" onClick={nouvelle} disabled={chargement}>
+          <Pencil size={15} /> Nouvelle séance
+        </Button>
+      </div>
+
+      {fiches.length === 0 ? (
+        <VideOnglet texte="Aucune séance enregistrée." />
+      ) : (
+        <ul className="flex flex-col gap-2">
+          {fiches.map((f) => (
+            <li key={f.id}>
+              <Link
+                href={`/clientes/${clientId}/seance/${f.id}`}
+                className="flex items-center justify-between rounded-[var(--radius-md)] border border-perle bg-white px-4 py-3 hover:bg-surface-muted"
+              >
+                <div>
+                  <p className="text-sm font-medium text-ink">
+                    Séance {f.numero_seance ? `n°${f.numero_seance}` : ""}
+                    {f.zone ? ` · ${f.zone}` : ""}
+                  </p>
+                  <p className="text-xs text-ink/50">
+                    {new Date(f.cree_le).toLocaleDateString("fr-FR")}
+                  </p>
+                </div>
+                {f.cloturee_le ? (
+                  <Badge ton="succes">Clôturée</Badge>
+                ) : (
+                  <Badge ton="alerte">En cours</Badge>
+                )}
+              </Link>
+            </li>
+          ))}
+        </ul>
+      )}
+    </div>
   );
 }
 
