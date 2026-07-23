@@ -150,6 +150,27 @@ export async function anonymiserClienteAction(
   return error ? { ok: false, erreur: "Anonymisation impossible." } : { ok: true };
 }
 
+/** Correction manuelle et justifiée du score de fiabilité (R9.5). */
+export async function corrigerFiabilite(
+  clientId: string,
+  impact: number,
+  commentaire: string,
+): Promise<{ ok: boolean; erreur?: string }> {
+  const ctx = await contexteEtablissement();
+  if (!ctx) return { ok: false, erreur: "Session expirée." };
+  if (!Number.isFinite(impact) || impact < -100 || impact > 100)
+    return { ok: false, erreur: "Impact invalide." };
+
+  const { error } = await ctx.supabase.from("evenements_fiabilite").insert({
+    etablissement_id: ctx.etablissementId,
+    client_id: clientId,
+    type: "correction",
+    impact: Math.round(impact),
+    commentaire: commentaire || null,
+  });
+  return error ? { ok: false, erreur: "Correction impossible." } : { ok: true };
+}
+
 export async function fusionnerClientesAction(
   garde: string,
   absorbe: string,

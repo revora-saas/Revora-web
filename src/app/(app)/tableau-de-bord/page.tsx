@@ -37,7 +37,7 @@ export default async function TableauDeBord() {
   const config = await getConfigurationEtablissement(etabId);
 
   const supabase = await creerClientServeur();
-  const [{ data: etablissement }, { count: nbClients }, { data: reglages }] =
+  const [{ data: etablissement }, { count: nbClients }, { data: reglages }, { data: echecs }] =
     await Promise.all([
       supabase.from("etablissements").select("nom, slug").eq("id", etabId).maybeSingle(),
       supabase
@@ -46,6 +46,13 @@ export default async function TableauDeBord() {
         .eq("etablissement_id", etabId)
         .is("archive_le", null),
       supabase.from("reglages").select("autres").eq("etablissement_id", etabId).maybeSingle(),
+      supabase
+        .from("messages")
+        .select("id, destinataire, erreur, cree_le")
+        .eq("etablissement_id", etabId)
+        .eq("statut", "echec")
+        .order("cree_le", { ascending: false })
+        .limit(5),
     ]);
 
   // Lien public de réservation (absolu, pour le partage).
@@ -78,6 +85,21 @@ export default async function TableauDeBord() {
           Bonjour {etat.nomAffiche ?? ""}, voici votre activité.
         </p>
       </div>
+
+      {echecs && echecs.length > 0 && (
+        <div className="rounded-[var(--radius-lg)] border border-red-200 bg-red-50 p-4">
+          <p className="font-heading font-semibold text-red-800">
+            {echecs.length} message{echecs.length > 1 ? "s" : ""} n&apos;{echecs.length > 1 ? "ont" : "a"} pas pu être envoyé
+          </p>
+          <ul className="mt-1 text-sm text-red-700">
+            {echecs.map((e) => (
+              <li key={e.id}>
+                {e.destinataire} — {e.erreur ?? "échec"}
+              </li>
+            ))}
+          </ul>
+        </div>
+      )}
 
       <ChecklistDemarrage
         etatInitial={checklist}

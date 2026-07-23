@@ -17,6 +17,7 @@ import {
   creneauxDisponibles,
   verrouillerCreneau,
   finaliserReservation,
+  rejoindreListeAttente,
 } from "@/app/(public)/[slug]/actions";
 
 interface Presta {
@@ -178,14 +179,24 @@ export function PublicBooking({
         )}
 
         {etape === "creneau" && (
-          <EtapeCreneau
-            jour={jour}
-            fuseau={fuseau}
-            creneaux={creneaux}
-            chargement={chargeCreneaux}
-            onJour={setJour}
-            onChoisir={choisirCreneau}
-          />
+          <>
+            <EtapeCreneau
+              jour={jour}
+              fuseau={fuseau}
+              creneaux={creneaux}
+              chargement={chargeCreneaux}
+              onJour={setJour}
+              onChoisir={choisirCreneau}
+            />
+            {!chargeCreneaux && creneaux.length === 0 && choisies.length > 0 && (
+              <ListeAttenteForm
+                onRejoindre={(nom, tel) =>
+                  rejoindreListeAttente(slug, choisies[0], nom, tel)
+                }
+              />
+            )}
+            {erreur && <p className="mt-3 text-sm text-red-600">{erreur}</p>}
+          </>
         )}
 
         {etape === "coordonnees" && verrou && (
@@ -426,6 +437,56 @@ function EtapeCreneau({
         </div>
       )}
     </div>
+  );
+}
+
+function ListeAttenteForm({
+  onRejoindre,
+}: {
+  onRejoindre: (nom: string, tel: string) => Promise<{ ok: boolean; erreur?: string }>;
+}) {
+  const [nom, setNom] = useState("");
+  const [tel, setTel] = useState("");
+  const [fait, setFait] = useState(false);
+  const [erreur, setErreur] = useState<string | null>(null);
+  const [chargement, setChargement] = useState(false);
+
+  async function envoyer(e: React.FormEvent) {
+    e.preventDefault();
+    setErreur(null);
+    setChargement(true);
+    const res = await onRejoindre(nom, tel);
+    setChargement(false);
+    if (res.ok) setFait(true);
+    else setErreur(res.erreur ?? "Erreur.");
+  }
+
+  if (fait) {
+    return (
+      <p className="mt-4 rounded-[var(--radius-md)] bg-green-50 p-3 text-center text-sm text-green-700">
+        Vous êtes inscrite en liste d&apos;attente. Nous vous préviendrons par SMS
+        dès qu&apos;une place se libère.
+      </p>
+    );
+  }
+
+  return (
+    <form onSubmit={envoyer} className="mt-4 flex flex-col gap-3 rounded-[var(--radius-lg)] border border-perle p-4">
+      <p className="text-sm font-medium text-ink">Être prévenue si une place se libère</p>
+      <Input label="Nom" value={nom} onChange={(e) => setNom(e.target.value)} required />
+      <Input
+        label="Téléphone mobile"
+        type="tel"
+        placeholder="06 12 34 56 78"
+        value={tel}
+        onChange={(e) => setTel(e.target.value)}
+        required
+      />
+      {erreur && <p className="text-sm text-red-600">{erreur}</p>}
+      <Button type="submit" variante="secondaire" pleineLargeur disabled={chargement}>
+        {chargement ? "Inscription…" : "M'inscrire en liste d'attente"}
+      </Button>
+    </form>
   );
 }
 

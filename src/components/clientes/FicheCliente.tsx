@@ -17,7 +17,7 @@ import { Badge, Button, Input, Sheet, Modal } from "@/components/ui";
 import { STATUTS, formaterTelephone, calculerCompletude } from "@/lib/clientes-ui";
 import { cn } from "@/lib/utils";
 import type { Tables } from "@/lib/database.types";
-import { majCliente, anonymiserClienteAction } from "@/app/(app)/clientes/actions";
+import { majCliente, anonymiserClienteAction, corrigerFiabilite } from "@/app/(app)/clientes/actions";
 
 type Cliente = Tables<"clients">;
 
@@ -260,7 +260,15 @@ function OngletProfil({
       <div className="rounded-[var(--radius-lg)] border border-perle bg-white px-4">
         <Ligne label="Visites" valeur={cliente.nombre_visites} />
         <Ligne label="Total dépensé" valeur={`${cliente.total_depense} €`} />
-        <Ligne label="Fiabilité" valeur={`${cliente.score_fiabilite}/100`} />
+        <Ligne
+          label="Fiabilité (non visible par la cliente)"
+          valeur={
+            <span className="inline-flex items-center gap-2">
+              {cliente.score_fiabilite}/100
+              <CorrectionFiabilite clientId={cliente.id} />
+            </span>
+          }
+        />
       </div>
 
       <ZoneRgpd cliente={cliente} />
@@ -318,6 +326,61 @@ function ZoneRgpd({ cliente }: { cliente: Cliente }) {
           </Button>
           <Button variante="danger" pleineLargeur onClick={anonymiser} disabled={chargement}>
             {chargement ? "Anonymisation…" : "Anonymiser"}
+          </Button>
+        </div>
+      </Modal>
+    </>
+  );
+}
+
+function CorrectionFiabilite({ clientId }: { clientId: string }) {
+  const router = useRouter();
+  const [ouvert, setOuvert] = useState(false);
+  const [impact, setImpact] = useState(10);
+  const [commentaire, setCommentaire] = useState("");
+  const [chargement, setChargement] = useState(false);
+
+  async function corriger() {
+    setChargement(true);
+    const res = await corrigerFiabilite(clientId, impact, commentaire);
+    setChargement(false);
+    if (res.ok) {
+      setOuvert(false);
+      setCommentaire("");
+      router.refresh();
+    }
+  }
+
+  return (
+    <>
+      <button onClick={() => setOuvert(true)} className="text-xs font-medium text-primary hover:underline">
+        Corriger
+      </button>
+      <Modal ouvert={ouvert} onFermer={() => setOuvert(false)} titre="Corriger la fiabilité">
+        <p className="mb-3 text-sm text-ink/60">
+          Ajustez le score si un événement a pénalisé injustement la cliente (annulation
+          justifiée…). La correction est journalisée.
+        </p>
+        <div className="flex flex-col gap-3">
+          <label className="flex flex-col gap-1.5">
+            <span className="text-sm font-medium text-ink">Ajustement (−100 à +100)</span>
+            <input
+              type="number"
+              value={impact}
+              min={-100}
+              max={100}
+              onChange={(e) => setImpact(Number(e.target.value))}
+              className="h-11 rounded-[var(--radius-md)] border border-perle px-3 text-sm"
+            />
+          </label>
+          <Input
+            label="Motif"
+            value={commentaire}
+            onChange={(e) => setCommentaire(e.target.value)}
+            placeholder="Annulation justifiée…"
+          />
+          <Button pleineLargeur onClick={corriger} disabled={chargement}>
+            {chargement ? "Enregistrement…" : "Appliquer la correction"}
           </Button>
         </div>
       </Modal>

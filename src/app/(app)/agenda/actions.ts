@@ -6,7 +6,34 @@ import {
   composer,
   type PrestationComposable,
 } from "@/lib/agenda";
+import { declencherListeAttente } from "@/lib/messagerie/rappels";
 import type { TablesUpdate } from "@/lib/database.types";
+
+/** Libère un créneau et propose la place à la liste d'attente (R10). */
+async function proposerListeAttente(
+  supabase: NonNullable<Awaited<ReturnType<typeof contexteEtablissement>>>["supabase"],
+  etablissementId: string,
+  rdvId: string,
+) {
+  const { data: rdv } = await supabase
+    .from("rendez_vous")
+    .select("debut_execution, fin_execution")
+    .eq("id", rdvId)
+    .maybeSingle();
+  const { data: rp } = await supabase
+    .from("rdv_prestations")
+    .select("prestation_id")
+    .eq("rendez_vous_id", rdvId)
+    .limit(1)
+    .maybeSingle();
+  if (rdv && rp?.prestation_id) {
+    await declencherListeAttente(supabase, etablissementId, {
+      debut: rdv.debut_execution,
+      fin: rdv.fin_execution,
+      prestationId: rp.prestation_id,
+    });
+  }
+}
 
 type Resultat =
   | { ok: true; id?: string }
@@ -270,9 +297,10 @@ export async function qualifierRdv(
     });
   }
 
-  // Un RDV annulé ou absent libère le créneau.
+  // Un RDV annulé ou absent libère le créneau et déclenche la liste d'attente.
   if (resultat !== "honore") {
     await ctx.supabase.from("occupations").delete().eq("rendez_vous_id", rdvId);
+    await proposerListeAttente(ctx.supabase, ctx.etablissementId, rdvId);
   }
   return { ok: true };
 }
@@ -300,8 +328,9 @@ export async function annulerRdv(rdvId: string, motif?: string): Promise<Resulta
     .eq("id", rdvId)
     .eq("etablissement_id", ctx.etablissementId);
   if (error) return { ok: false, erreur: "Annulation impossible." };
-  // Libère le créneau.
+  // Libère le créneau et propose la place à la liste d'attente.
   await ctx.supabase.from("occupations").delete().eq("rendez_vous_id", rdvId);
+  await proposerListeAttente(ctx.supabase, ctx.etablissementId, rdvId);
   return { ok: true };
 }
 

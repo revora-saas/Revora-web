@@ -440,6 +440,69 @@ export async function finaliserReservation(
   return { ok: true, statut, acompteDu };
 }
 
+// ---------------------------------------------------------------------
+// Inscription en liste d'attente (R10.1)
+// ---------------------------------------------------------------------
+export async function rejoindreListeAttente(
+  slug: string,
+  prestationId: string,
+  nom: string,
+  telephone: string,
+): Promise<{ ok: boolean; erreur?: string }> {
+  const ctx = await resoudreEtablissement(slug);
+  if (!ctx) return { ok: false, erreur: "Établissement introuvable." };
+  const { svc, etab } = ctx;
+
+  const e164 = normaliserTelephoneFr(telephone);
+  if (!e164) return { ok: false, erreur: "Numéro de mobile invalide." };
+  if (!nom.trim()) return { ok: false, erreur: "Nom obligatoire." };
+
+  // Cliente existante ou création.
+  const { data: existante } = await svc
+    .from("clients")
+    .select("id")
+    .eq("etablissement_id", etab.id)
+    .eq("telephone_mobile", e164)
+    .is("archive_le", null)
+    .maybeSingle();
+  let clientId = existante?.id ?? null;
+  if (!clientId) {
+    const { data: cree } = await svc
+      .from("clients")
+      .insert({
+        etablissement_id: etab.id,
+        nom: nom.trim(),
+        telephone_mobile: e164,
+        source: "reservation_en_ligne",
+      })
+      .select("id")
+      .single();
+    clientId = cree?.id ?? null;
+  }
+  if (!clientId) return { ok: false, erreur: "Enregistrement impossible." };
+
+  // Disponibilités = jours et horaires d'ouverture (couverture large par défaut).
+  const { data: horaires } = await svc
+    .from("horaires")
+    .select("jour_semaine, heure_debut, heure_fin")
+    .eq("etablissement_id", etab.id)
+    .is("membre_id", null);
+  const disponibilites = (horaires ?? []).map((h) => ({
+    jour: h.jour_semaine,
+    debut: h.heure_debut.slice(0, 5),
+    fin: h.heure_fin.slice(0, 5),
+  }));
+
+  const { error } = await svc.from("liste_attente").insert({
+    etablissement_id: etab.id,
+    client_id: clientId,
+    prestation_id: prestationId,
+    disponibilites,
+    statut: "active",
+  });
+  return error ? { ok: false, erreur: "Inscription impossible." } : { ok: true };
+}
+
 /** Frais de déplacement selon la zone (code postal) — R6.4. */
 function fraisDeplacement(zones: unknown, codePostal: string): number {
   if (!Array.isArray(zones)) return 0;

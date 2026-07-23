@@ -731,6 +731,7 @@ export type Database = {
           statut: string
           reponse: string | null
           cout_credits: number
+          code: string | null
           erreur: string | null
           planifie_le: string | null
           envoye_le: string | null
@@ -748,6 +749,7 @@ export type Database = {
           statut?: string
           reponse?: string | null
           cout_credits?: number
+          code?: string | null
           erreur?: string | null
           planifie_le?: string | null
           envoye_le?: string | null
@@ -765,6 +767,7 @@ export type Database = {
           statut?: string
           reponse?: string | null
           cout_credits?: number
+          code?: string | null
           erreur?: string | null
           planifie_le?: string | null
           envoye_le?: string | null
