@@ -1367,6 +1367,28 @@ export type Database = {
         Args: { p_garde: string; p_absorbe: string };
         Returns: undefined;
       };
+      creer_rendez_vous: {
+        Args: {
+          p_etablissement: string;
+          p_client_id: string | null;
+          p_membre_id: string | null;
+          p_debut_execution: string;
+          p_fin_execution: string;
+          p_debut_bloque: string;
+          p_fin_bloque: string;
+          p_occupations: Json;
+          p_ressource_ids?: string[];
+          p_statut?: string;
+          p_origine?: string;
+          p_montant_total?: number;
+          p_acompte_du?: number;
+          p_a_domicile?: boolean;
+          p_adresse?: string | null;
+          p_notes?: string | null;
+          p_prestations?: Json;
+        };
+        Returns: string;
+      };
     };
     Enums: {
       role_membre: "proprietaire" | "gestionnaire" | "employe" | "receptionniste"
