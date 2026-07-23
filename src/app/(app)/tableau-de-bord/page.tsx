@@ -4,6 +4,7 @@ import { getEtatProfil } from "@/lib/auth";
 import { getConfigurationEtablissement } from "@/lib/metier";
 import { creerClientServeur } from "@/lib/supabase/server";
 import { ChecklistDemarrage } from "@/components/app/ChecklistDemarrage";
+import { PartagerLien } from "@/components/app/PartagerLien";
 
 export const metadata = { title: "Tableau de bord" };
 
@@ -83,6 +84,8 @@ export default async function TableauDeBord() {
         lienReservation={lienReservation}
         motClient={motClient}
       />
+
+      <PartagerLien lien={lienReservation} />
 
       {/* Widgets d'accueil, dans l'ordre défini par le profil métier (M5.1). */}
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">

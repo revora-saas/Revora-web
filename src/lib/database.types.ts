@@ -1401,6 +1401,24 @@ export type Database = {
         };
         Returns: undefined;
       };
+      verrouiller_creneau: {
+        Args: {
+          p_etablissement: string;
+          p_membre_id: string | null;
+          p_debut_execution: string;
+          p_fin_execution: string;
+          p_debut_bloque: string;
+          p_fin_bloque: string;
+          p_occupations: Json;
+          p_ressource_ids?: string[];
+          p_verrou_minutes?: number;
+        };
+        Returns: string;
+      };
+      nettoyer_verrous: {
+        Args: { p_etablissement: string };
+        Returns: undefined;
+      };
     };
     Enums: {
       role_membre: "proprietaire" | "gestionnaire" | "employe" | "receptionniste"
