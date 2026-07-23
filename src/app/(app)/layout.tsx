@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { redirect } from "next/navigation";
-import { LogOut, LayoutDashboard, Users } from "lucide-react";
+import { LogOut, LayoutDashboard, Users, Tag } from "lucide-react";
 import { getEtatProfil } from "@/lib/auth";
 import { onboardingEstTermine, getConfigurationEtablissement } from "@/lib/metier";
 import { deconnexion } from "@/app/(auth)/actions";
@@ -42,6 +42,9 @@ export default async function AppLayout({
               <LienNav href="/clientes" icone={<Users size={16} />}>
                 <span className="capitalize">{motClient}</span>
               </LienNav>
+              <LienNav href="/catalogue" icone={<Tag size={16} />}>
+                Catalogue
+              </LienNav>
             </nav>
           </div>
           <div className="flex items-center gap-3">
@@ -68,6 +71,7 @@ export default async function AppLayout({
       <nav className="fixed inset-x-0 bottom-0 z-10 flex border-t border-perle bg-white sm:hidden">
         <OngletMobile href="/tableau-de-bord" icone={<LayoutDashboard size={20} />} label="Accueil" />
         <OngletMobile href="/clientes" icone={<Users size={20} />} label={motClient} />
+        <OngletMobile href="/catalogue" icone={<Tag size={20} />} label="Catalogue" />
       </nav>
     </div>
   );
