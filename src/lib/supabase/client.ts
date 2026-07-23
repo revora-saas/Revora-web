@@ -1,0 +1,12 @@
+import { createBrowserClient } from "@supabase/ssr";
+
+/**
+ * Client Supabase côté navigateur (composants clients).
+ * À utiliser dans les composants marqués "use client".
+ */
+export function creerClientNavigateur() {
+  return createBrowserClient(
+    process.env.NEXT_PUBLIC_SUPABASE_URL!,
+    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+  );
+}

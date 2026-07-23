@@ -1,0 +1,62 @@
+@import "tailwindcss";
+
+/* =====================================================================
+   REVORA — Design system (Tailwind v4, configuration en CSS)
+   Couleurs et polices définies dans CLAUDE.md.
+   - Identité de marque : sombre et premium (fonds bleu nuit).
+   - Écrans de travail : clairs (lisibilité en institut, en plein jour).
+   ===================================================================== */
+
+@theme {
+  /* --- Couleurs de marque --- */
+  --color-primary: #6d4cff;        /* Violet principal : accents, boutons, liens */
+  --color-primary-deep: #4b1d8c;   /* Violet profond : dégradés, éléments forts */
+  --color-lavande: #b794f6;        /* Lavande : accents doux */
+  --color-ink: #0b1020;            /* Bleu nuit : texte principal, fonds sombres */
+  --color-perle: #e6e8ef;          /* Gris perle : bordures, séparateurs */
+
+  /* Variantes utilitaires du violet principal (survols, fonds légers) */
+  --color-primary-50: #f3f0ff;
+  --color-primary-100: #e9e3ff;
+  --color-primary-600: #5a3ce6;
+  --color-primary-700: #4b1d8c;
+
+  /* --- Surfaces (écrans de travail clairs) --- */
+  --color-surface: #ffffff;        /* Fond des écrans de travail */
+  --color-surface-muted: #f7f7fb;  /* Fond secondaire, cartes discrètes */
+
+  /* --- Rétrocompat variables scaffold --- */
+  --color-background: #ffffff;
+  --color-foreground: var(--color-ink);
+
+  /* --- Polices (chargées via next/font dans layout.tsx) --- */
+  --font-sans: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+  --font-heading: var(--font-poppins), var(--font-inter), ui-sans-serif, sans-serif;
+
+  /* --- Rayons (bords arrondis, style épuré) --- */
+  --radius-sm: 0.5rem;
+  --radius-md: 0.75rem;
+  --radius-lg: 1rem;
+  --radius-xl: 1.5rem;
+
+  /* --- Ombres douces --- */
+  --shadow-douce: 0 1px 3px rgb(11 16 32 / 0.06), 0 8px 24px rgb(11 16 32 / 0.05);
+  --shadow-carte: 0 1px 2px rgb(11 16 32 / 0.05);
+}
+
+/* Écrans de travail : fond clair par défaut, texte bleu nuit.
+   Pas de dark mode automatique : la lisibilité en institut prime. */
+html {
+  color-scheme: light;
+}
+
+body {
+  background: var(--color-surface);
+  color: var(--color-ink);
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-heading);
+}
