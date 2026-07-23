@@ -4,6 +4,7 @@ import { LogOut, LayoutDashboard, Users, Tag, Calendar, Euro, Package, LineChart
 import { getEtatProfil } from "@/lib/auth";
 import { onboardingEstTermine, getConfigurationEtablissement } from "@/lib/metier";
 import { deconnexion } from "@/app/(auth)/actions";
+import { Pwa } from "@/components/app/Pwa";
 
 /**
  * Layout de l'application authentifiée. Garde d'accès :
@@ -93,6 +94,8 @@ export default async function AppLayout({
         <OngletMobile href="/clientes" icone={<Users size={20} />} label={motClient} />
         <OngletMobile href="/caisse" icone={<Euro size={20} />} label="Caisse" />
       </nav>
+
+      <Pwa />
     </div>
   );
 }

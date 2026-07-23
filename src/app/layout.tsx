@@ -24,6 +24,12 @@ export const metadata: Metadata = {
   description:
     "Revora : rendez-vous, clientes, caisse, stock et traçabilité pour les professionnels de la beauté en France. Anti no-show intégré.",
   applicationName: "Revora",
+  manifest: "/manifest.webmanifest",
+  icons: {
+    icon: "/icones/icon-192.png",
+    apple: "/icones/apple-icon.png",
+  },
+  appleWebApp: { capable: true, statusBarStyle: "black-translucent", title: "Revora" },
 };
 
 // Mobile-first : l'app est une PWA installable, utilisable d'une main.
