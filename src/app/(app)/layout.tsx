@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { redirect } from "next/navigation";
-import { LogOut, LayoutDashboard, Users, Tag, Calendar, Euro, Package, LineChart } from "lucide-react";
+import { LogOut, LayoutDashboard, Users, Tag, Calendar, Euro, Package, LineChart, Settings } from "lucide-react";
 import { getEtatProfil } from "@/lib/auth";
 import { onboardingEstTermine, getConfigurationEtablissement } from "@/lib/metier";
 import { deconnexion } from "@/app/(auth)/actions";
@@ -65,6 +65,13 @@ export default async function AppLayout({
                 {etat.nomAffiche}
               </span>
             )}
+            <Link
+              href="/reglages"
+              className="rounded-[var(--radius-md)] p-1.5 text-ink/60 hover:bg-surface-muted hover:text-ink"
+              aria-label="Réglages"
+            >
+              <Settings size={18} />
+            </Link>
             <form action={deconnexion}>
               <button
                 type="submit"

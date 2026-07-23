@@ -150,6 +150,42 @@ export async function anonymiserClienteAction(
   return error ? { ok: false, erreur: "Anonymisation impossible." } : { ok: true };
 }
 
+/** Clientes à relancer : prochaine visite estimée dépassée (C2.3). */
+export async function listerRelances(): Promise<
+  { id: string; nom: string; tel: string | null; joursRetard: number }[]
+> {
+  const ctx = await contexteEtablissement();
+  if (!ctx) return [];
+  const { data } = await ctx.supabase
+    .from("clients")
+    .select("id, nom, prenom, telephone_mobile, derniere_visite, frequence_moyenne_j")
+    .eq("etablissement_id", ctx.etablissementId)
+    .is("archive_le", null)
+    .is("anonymise_le", null)
+    .not("derniere_visite", "is", null);
+
+  const maintenant = Date.now();
+  return (data ?? [])
+    .map((c) => {
+      if (!c.derniere_visite || !c.frequence_moyenne_j) return null;
+      const prochaine = new Date(c.derniere_visite).getTime() + c.frequence_moyenne_j * 86400000;
+      if (prochaine >= maintenant) return null;
+      return {
+        id: c.id,
+        nom: c.prenom ? `${c.prenom} ${c.nom}` : c.nom,
+        tel: c.telephone_mobile,
+        joursRetard: Math.floor((maintenant - prochaine) / 86400000),
+      };
+    })
+    .filter(Boolean)
+    .sort((a, b) => b!.joursRetard - a!.joursRetard) as {
+    id: string;
+    nom: string;
+    tel: string | null;
+    joursRetard: number;
+  }[];
+}
+
 /** Correction manuelle et justifiée du score de fiabilité (R9.5). */
 export async function corrigerFiabilite(
   clientId: string,
