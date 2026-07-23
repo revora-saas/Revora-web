@@ -1350,6 +1350,23 @@ export type Database = {
         Args: { p_client_id: string };
         Returns: undefined;
       };
+      rechercher_clients: {
+        Args: {
+          p_etablissement: string;
+          p_recherche?: string;
+          p_limit?: number;
+          p_offset?: number;
+        };
+        Returns: Database["public"]["Tables"]["clients"]["Row"][];
+      };
+      anonymiser_cliente: {
+        Args: { p_client_id: string };
+        Returns: undefined;
+      };
+      fusionner_clientes: {
+        Args: { p_garde: string; p_absorbe: string };
+        Returns: undefined;
+      };
     };
     Enums: {
       role_membre: "proprietaire" | "gestionnaire" | "employe" | "receptionniste"

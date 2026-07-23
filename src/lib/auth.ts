@@ -1,5 +1,33 @@
 import { creerClientServeur } from "@/lib/supabase/server";
-import type { User } from "@supabase/supabase-js";
+import type { SupabaseClient, User } from "@supabase/supabase-js";
+import type { Database } from "@/lib/database.types";
+
+/**
+ * Résout l'établissement actif de l'utilisateur connecté, avec un client
+ * Supabase serveur prêt à l'emploi. Renvoie null si non authentifié ou sans
+ * établissement. Utilisé par toutes les actions de l'app.
+ */
+export async function contexteEtablissement(): Promise<{
+  supabase: SupabaseClient<Database>;
+  userId: string;
+  etablissementId: string;
+} | null> {
+  const supabase = await creerClientServeur();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+  if (!user) return null;
+
+  const { data: membre } = await supabase
+    .from("membres")
+    .select("etablissement_id")
+    .eq("user_id", user.id)
+    .eq("actif", true)
+    .maybeSingle();
+  if (!membre) return null;
+
+  return { supabase, userId: user.id, etablissementId: membre.etablissement_id };
+}
 
 /** Utilisateur connecté (ou null) — côté serveur. */
 export async function getUtilisateur(): Promise<User | null> {
