@@ -19,3 +19,5 @@ export * from "./ouverture";
 export * from "./disponibilites";
 export * from "./creneaux";
 export * from "./affectation";
+export * from "./composition";
+export * from "./feries";

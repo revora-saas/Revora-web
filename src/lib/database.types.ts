@@ -1389,6 +1389,18 @@ export type Database = {
         };
         Returns: string;
       };
+      deplacer_rendez_vous: {
+        Args: {
+          p_rdv: string;
+          p_debut_execution: string;
+          p_fin_execution: string;
+          p_debut_bloque: string;
+          p_fin_bloque: string;
+          p_occupations: Json;
+          p_ressource_ids?: string[];
+        };
+        Returns: undefined;
+      };
     };
     Enums: {
       role_membre: "proprietaire" | "gestionnaire" | "employe" | "receptionniste"

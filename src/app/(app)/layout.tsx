@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { redirect } from "next/navigation";
-import { LogOut, LayoutDashboard, Users, Tag } from "lucide-react";
+import { LogOut, LayoutDashboard, Users, Tag, Calendar } from "lucide-react";
 import { getEtatProfil } from "@/lib/auth";
 import { onboardingEstTermine, getConfigurationEtablissement } from "@/lib/metier";
 import { deconnexion } from "@/app/(auth)/actions";
@@ -39,6 +39,9 @@ export default async function AppLayout({
               <LienNav href="/tableau-de-bord" icone={<LayoutDashboard size={16} />}>
                 Accueil
               </LienNav>
+              <LienNav href="/agenda" icone={<Calendar size={16} />}>
+                Agenda
+              </LienNav>
               <LienNav href="/clientes" icone={<Users size={16} />}>
                 <span className="capitalize">{motClient}</span>
               </LienNav>
@@ -70,6 +73,7 @@ export default async function AppLayout({
       {/* Barre d'onglets mobile (M2.1) */}
       <nav className="fixed inset-x-0 bottom-0 z-10 flex border-t border-perle bg-white sm:hidden">
         <OngletMobile href="/tableau-de-bord" icone={<LayoutDashboard size={20} />} label="Accueil" />
+        <OngletMobile href="/agenda" icone={<Calendar size={20} />} label="Agenda" />
         <OngletMobile href="/clientes" icone={<Users size={20} />} label={motClient} />
         <OngletMobile href="/catalogue" icone={<Tag size={20} />} label="Catalogue" />
       </nav>
