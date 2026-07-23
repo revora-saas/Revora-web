@@ -44,9 +44,8 @@ export function CompleterProfilClient({
     const res = await finaliserProfil({ nom, prenom, nomCommercial, telephone, code });
     setChargement(false);
     if (res.ok) {
-      // L'espace est créé : on rejoint l'application (l'onboarding métier
-      // sera branché au prompt 03).
-      router.push("/tableau-de-bord");
+      // L'espace est créé : on enchaîne sur la configuration métier.
+      router.push("/onboarding");
       router.refresh();
     } else {
       setErreur(res.erreur);

@@ -1,6 +1,7 @@
 import { redirect } from "next/navigation";
 import { LogOut } from "lucide-react";
 import { getEtatProfil } from "@/lib/auth";
+import { onboardingEstTermine } from "@/lib/metier";
 import { deconnexion } from "@/app/(auth)/actions";
 
 /**
@@ -17,6 +18,10 @@ export default async function AppLayout({
 
   if (!etat.user) redirect("/connexion");
   if (!etat.profilComplet || !etat.aEtablissement) redirect("/completer-profil");
+  // Onboarding métier obligatoire avant d'accéder à l'application.
+  if (etat.etablissementId && !(await onboardingEstTermine(etat.etablissementId))) {
+    redirect("/onboarding");
+  }
 
   return (
     <div className="flex min-h-dvh flex-col bg-surface-muted">

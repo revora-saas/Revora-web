@@ -25,10 +25,10 @@ insert into metiers (code, libelle, configuration) values
     "consentements": false, "dossier_ars": false, "file_attente": false
   },
   "catalogue_defaut": [
-    { "nom": "Pose complète gel", "duree_preparation": 5, "duree_execution": 90, "duree_nettoyage": 10, "prix": 45 },
-    { "nom": "Remplissage gel", "duree_preparation": 5, "duree_execution": 75, "duree_nettoyage": 10, "prix": 35 },
+    { "nom": "Pose complète gel", "duree_preparation": 5, "duree_execution": 90, "duree_nettoyage": 10, "prix": 45, "cycle_rappel_jours": 21 },
+    { "nom": "Remplissage gel", "duree_preparation": 5, "duree_execution": 75, "duree_nettoyage": 10, "prix": 35, "cycle_rappel_jours": 21 },
     { "nom": "Dépose", "duree_preparation": 0, "duree_execution": 30, "duree_nettoyage": 5, "prix": 15 },
-    { "nom": "Semi-permanent", "duree_preparation": 5, "duree_execution": 45, "duree_nettoyage": 5, "prix": 25 },
+    { "nom": "Semi-permanent", "duree_preparation": 5, "duree_execution": 45, "duree_nettoyage": 5, "prix": 25, "cycle_rappel_jours": 21 },
     { "nom": "Nail art", "duree_preparation": 0, "duree_execution": 30, "duree_nettoyage": 5, "prix": 15 }
   ],
   "fiche_technique": [
@@ -50,9 +50,9 @@ insert into metiers (code, libelle, configuration) values
     "dossier_ars": false, "temps_pose": false, "file_attente": false
   },
   "catalogue_defaut": [
-    { "nom": "Pose cil a cil", "duree_preparation": 5, "duree_execution": 120, "duree_nettoyage": 10, "prix": 70 },
-    { "nom": "Volume russe", "duree_preparation": 5, "duree_execution": 150, "duree_nettoyage": 10, "prix": 90 },
-    { "nom": "Remplissage", "duree_preparation": 5, "duree_execution": 90, "duree_nettoyage": 10, "prix": 45 },
+    { "nom": "Pose cil a cil", "duree_preparation": 5, "duree_execution": 120, "duree_nettoyage": 10, "prix": 70, "patch_test": true, "cycle_rappel_jours": 21 },
+    { "nom": "Volume russe", "duree_preparation": 5, "duree_execution": 150, "duree_nettoyage": 10, "prix": 90, "patch_test": true, "cycle_rappel_jours": 21 },
+    { "nom": "Remplissage", "duree_preparation": 5, "duree_execution": 90, "duree_nettoyage": 10, "prix": 45, "cycle_rappel_jours": 21 },
     { "nom": "Dépose", "duree_preparation": 0, "duree_execution": 30, "duree_nettoyage": 5, "prix": 20 },
     { "nom": "Rehaussement", "duree_preparation": 5, "duree_execution": 60, "duree_nettoyage": 5, "prix": 45 }
   ],
@@ -76,11 +76,11 @@ insert into metiers (code, libelle, configuration) values
     "mapping": true, "temps_pose": false, "file_attente": false
   },
   "catalogue_defaut": [
-    { "nom": "Microblading", "duree_preparation": 10, "duree_execution": 120, "duree_nettoyage": 20, "prix": 300 },
-    { "nom": "Sourcils poudré", "duree_preparation": 10, "duree_execution": 150, "duree_nettoyage": 20, "prix": 350 },
-    { "nom": "Lèvres", "duree_preparation": 10, "duree_execution": 150, "duree_nettoyage": 20, "prix": 400 },
-    { "nom": "Eyeliner", "duree_preparation": 10, "duree_execution": 90, "duree_nettoyage": 20, "prix": 250 },
-    { "nom": "Retouche", "duree_preparation": 10, "duree_execution": 90, "duree_nettoyage": 20, "prix": 80 },
+    { "nom": "Microblading", "duree_preparation": 10, "duree_execution": 120, "duree_nettoyage": 20, "prix": 300, "pmu": true, "cycle_rappel_jours": 42 },
+    { "nom": "Sourcils poudré", "duree_preparation": 10, "duree_execution": 150, "duree_nettoyage": 20, "prix": 350, "pmu": true, "cycle_rappel_jours": 42 },
+    { "nom": "Lèvres", "duree_preparation": 10, "duree_execution": 150, "duree_nettoyage": 20, "prix": 400, "pmu": true, "cycle_rappel_jours": 42 },
+    { "nom": "Eyeliner", "duree_preparation": 10, "duree_execution": 90, "duree_nettoyage": 20, "prix": 250, "pmu": true, "cycle_rappel_jours": 42 },
+    { "nom": "Retouche", "duree_preparation": 10, "duree_execution": 90, "duree_nettoyage": 20, "prix": 80, "pmu": true },
     { "nom": "Consultation", "duree_preparation": 0, "duree_execution": 30, "duree_nettoyage": 0, "prix": 0 }
   ],
   "fiche_technique": [
