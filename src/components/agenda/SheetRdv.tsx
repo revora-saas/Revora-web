@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { toZonedTime } from "date-fns-tz";
 import Link from "next/link";
-import { Phone, MessageSquare, Move, Trash2, User, Check, X } from "lucide-react";
+import { Phone, MessageSquare, Move, Trash2, User, Check, X, Euro } from "lucide-react";
 import { Sheet, Button, Badge } from "@/components/ui";
 import { formaterTelephone } from "@/lib/clientes-ui";
 import { qualifierRdv, annulerRdv } from "@/app/(app)/agenda/actions";
@@ -93,6 +93,12 @@ export function SheetRdv({
             href={rdv.clientId ? `/clientes/${rdv.clientId}` : undefined}
           />
         </div>
+
+        <Link href={`/caisse/nouveau?rdv=${rdv.id}`}>
+          <div className="flex items-center justify-center gap-2 rounded-[var(--radius-md)] border border-perle bg-white py-2.5 text-sm font-medium text-ink hover:bg-surface-muted">
+            <Euro size={16} /> Encaisser
+          </div>
+        </Link>
 
         {rdv.clientTel && (
           <p className="text-sm text-ink/50">

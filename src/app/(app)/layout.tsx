@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { redirect } from "next/navigation";
-import { LogOut, LayoutDashboard, Users, Tag, Calendar } from "lucide-react";
+import { LogOut, LayoutDashboard, Users, Tag, Calendar, Euro, Package, LineChart } from "lucide-react";
 import { getEtatProfil } from "@/lib/auth";
 import { onboardingEstTermine, getConfigurationEtablissement } from "@/lib/metier";
 import { deconnexion } from "@/app/(auth)/actions";
@@ -48,6 +48,15 @@ export default async function AppLayout({
               <LienNav href="/catalogue" icone={<Tag size={16} />}>
                 Catalogue
               </LienNav>
+              <LienNav href="/caisse" icone={<Euro size={16} />}>
+                Caisse
+              </LienNav>
+              <LienNav href="/stock" icone={<Package size={16} />}>
+                Stock
+              </LienNav>
+              <LienNav href="/finance" icone={<LineChart size={16} />}>
+                Finance
+              </LienNav>
             </nav>
           </div>
           <div className="flex items-center gap-3">
@@ -75,7 +84,7 @@ export default async function AppLayout({
         <OngletMobile href="/tableau-de-bord" icone={<LayoutDashboard size={20} />} label="Accueil" />
         <OngletMobile href="/agenda" icone={<Calendar size={20} />} label="Agenda" />
         <OngletMobile href="/clientes" icone={<Users size={20} />} label={motClient} />
-        <OngletMobile href="/catalogue" icone={<Tag size={20} />} label="Catalogue" />
+        <OngletMobile href="/caisse" icone={<Euro size={20} />} label="Caisse" />
       </nav>
     </div>
   );

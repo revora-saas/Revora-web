@@ -148,7 +148,7 @@ export function FicheCliente({
         <ActionRapide
           icone={Euro}
           label="Encaisser"
-          href={`/caisse?client=${cliente.id}`}
+          href={`/caisse/nouveau?client=${cliente.id}`}
         />
       </div>
 

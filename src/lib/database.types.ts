@@ -1422,6 +1422,17 @@ export type Database = {
         Args: { p_etablissement: string };
         Returns: undefined;
       };
+      creer_encaissement: {
+        Args: {
+          p_etablissement: string;
+          p_client_id: string | null;
+          p_rendez_vous_id: string | null;
+          p_lignes: Json;
+          p_paiements: Json;
+          p_acompte_deduit?: number;
+        };
+        Returns: Json;
+      };
     };
     Enums: {
       role_membre: "proprietaire" | "gestionnaire" | "employe" | "receptionniste"
