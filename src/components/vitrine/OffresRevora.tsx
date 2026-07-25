@@ -98,7 +98,7 @@ function CarteOffre({ offre }: { offre: Offre }) {
   const pop = offre.populaire;
   return (
     <article
-      className={`flex min-w-[50%] shrink-0 snap-start flex-col rounded-[22px] bg-white p-5 sm:min-w-[42%] md:min-w-0 md:p-6 ${
+      className={`flex w-[76%] shrink-0 snap-start flex-col rounded-[22px] bg-white p-5 sm:w-[44%] md:w-full md:p-6 ${
         pop
           ? "border-2 border-violet shadow-[0_10px_30px_-14px_rgb(118_86_201_/_0.5)]"
           : "border border-bordure"
