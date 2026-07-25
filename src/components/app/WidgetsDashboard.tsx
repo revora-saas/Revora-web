@@ -2,11 +2,53 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import { ChevronUp, ChevronDown, Eye, EyeOff, SlidersHorizontal } from "lucide-react";
-import { Card } from "@/components/ui";
+import {
+  ChevronUp, ChevronDown, Eye, EyeOff, SlidersHorizontal,
+  Calendar, Euro, UserPlus, Package, Bell, Sparkles, ClipboardList,
+  AlertTriangle, Gauge, Users, type LucideIcon,
+} from "lucide-react";
 import { cn } from "@/lib/utils";
 import { majOrdreWidgets } from "@/app/(app)/actions";
 import type { DonneeWidget } from "@/lib/widgets";
+
+const ICONES: Record<string, LucideIcon> = {
+  rdv_jour: Calendar,
+  recette_jour: Euro,
+  taux_remplissage: Gauge,
+  nouvelles_clientes: UserPlus,
+  stock_faible: Package,
+  relances_faire: Bell,
+  remplissages_relancer: Bell,
+  remplissages_avenir: Calendar,
+  premieres_poses_sans_patch: AlertTriangle,
+  retouches_planifier: Sparkles,
+  consentements_manquants: ClipboardList,
+  pigments_perimes: AlertTriangle,
+  file_attente: Users,
+  cures_en_cours: ClipboardList,
+  notifications: Bell,
+};
+
+/** Jauge circulaire (taux de remplissage). */
+function JaugeCirculaire({ pourcent }: { pourcent: number }) {
+  const p = Math.max(0, Math.min(100, pourcent));
+  const r = 26;
+  const c = 2 * Math.PI * r;
+  return (
+    <svg width="64" height="64" viewBox="0 0 64 64" className="shrink-0">
+      <circle cx="32" cy="32" r={r} fill="none" stroke="var(--color-perle)" strokeWidth="7" />
+      <circle
+        cx="32" cy="32" r={r} fill="none"
+        stroke="var(--color-primary)" strokeWidth="7" strokeLinecap="round"
+        strokeDasharray={c} strokeDashoffset={c - (c * p) / 100}
+        transform="rotate(-90 32 32)"
+      />
+      <text x="32" y="36" textAnchor="middle" className="fill-ink font-heading text-[15px] font-bold">
+        {p}%
+      </text>
+    </svg>
+  );
+}
 
 const LABELS: Record<string, string> = {
   rdv_jour: "Rendez-vous du jour",
@@ -98,7 +140,7 @@ export function WidgetsDashboard({
           ))}
         </ul>
       ) : (
-        <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+        <div className="grid grid-cols-2 gap-3 lg:grid-cols-3">
           {visibles.map((cle) => (
             <WidgetCarte key={cle} cle={cle} donnee={donnees[cle]} />
           ))}
@@ -109,18 +151,50 @@ export function WidgetsDashboard({
 }
 
 function WidgetCarte({ cle, donnee }: { cle: string; donnee?: DonneeWidget }) {
+  const Icone = ICONES[cle] ?? Sparkles;
+  const alerte = donnee?.alerte;
+  const jauge = cle === "taux_remplissage" && donnee;
+  const pourcent = jauge ? parseInt(donnee!.valeur, 10) || 0 : 0;
+
   const contenu = (
-    <Card className={cn("h-full", donnee?.alerte && "border-amber-300 bg-amber-50/50")}>
-      <p className="text-sm text-ink/60">{LABELS[cle] ?? cle}</p>
-      {donnee ? (
-        <>
-          <p className="font-heading text-2xl font-bold text-ink">{donnee.valeur}</p>
-          {donnee.detail && <p className="text-xs text-ink/50">{donnee.detail}</p>}
-        </>
-      ) : (
-        <p className="text-sm text-ink/40">À venir</p>
+    <div
+      className={cn(
+        "flex h-full flex-col rounded-[18px] border bg-white p-4 shadow-[0_1px_2px_rgb(11_16_32_/_0.04)] transition-shadow hover:shadow-[0_1px_2px_rgb(11_16_32_/_0.05),0_16px_32px_-26px_rgb(11_16_32_/_0.3)]",
+        alerte ? "border-terracotta/30" : "border-perle",
       )}
-    </Card>
+    >
+      <div className="flex items-center justify-between">
+        <p className="text-[13px] font-medium text-ink/55">{LABELS[cle] ?? cle}</p>
+        <span
+          className={cn(
+            "grid h-8 w-8 place-items-center rounded-full",
+            alerte ? "bg-terracotta/10 text-terracotta" : "bg-primary-50 text-primary",
+          )}
+        >
+          <Icone size={16} />
+        </span>
+      </div>
+
+      {jauge ? (
+        <div className="mt-2 flex items-center gap-3">
+          <JaugeCirculaire pourcent={pourcent} />
+          {donnee?.detail && <span className="text-xs text-ink/50">{donnee.detail}</span>}
+        </div>
+      ) : donnee ? (
+        <div className="mt-2">
+          <p className="font-heading text-[26px] font-bold leading-none text-ink">{donnee.valeur}</p>
+          {donnee.detail && <p className="mt-1.5 text-xs text-ink/50">{donnee.detail}</p>}
+        </div>
+      ) : (
+        <p className="mt-2 text-sm text-ink/40">À venir</p>
+      )}
+    </div>
   );
-  return donnee?.href ? <Link href={donnee.href}>{contenu}</Link> : contenu;
+  return donnee?.href ? (
+    <Link href={donnee.href} className="block">
+      {contenu}
+    </Link>
+  ) : (
+    contenu
+  );
 }
