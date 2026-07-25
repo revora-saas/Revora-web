@@ -17,8 +17,13 @@ export function EnteteVitrine() {
 
   return (
     <header className="sticky top-0 z-50 border-b border-bordure/70 bg-ivoire/85 backdrop-blur-md">
-      <div className="mx-auto flex h-16 max-w-6xl items-center justify-between px-5">
-        <Link href="/" aria-label="Accueil Revora" onClick={() => setOuvert(false)}>
+      <div className="mx-auto flex h-16 max-w-6xl items-center justify-between gap-2 px-4 sm:px-5">
+        <Link
+          href="/"
+          aria-label="Accueil Revora"
+          onClick={() => setOuvert(false)}
+          className="shrink-0"
+        >
           <LogoRevora />
         </Link>
 
@@ -35,18 +40,20 @@ export function EnteteVitrine() {
           ))}
         </nav>
 
-        <div className="flex items-center gap-2">
+        <div className="flex shrink-0 items-center gap-1.5 sm:gap-2">
           <Link
             href="/connexion"
             className="hidden rounded-full px-4 py-2 text-sm font-medium text-prune transition-colors hover:bg-lavande-clair md:inline-flex"
           >
             Se connecter
           </Link>
+          {/* CTA : compact sur mobile, complet à partir de md */}
           <Link
             href="/inscription"
-            className="inline-flex h-11 items-center justify-center rounded-full bg-violet px-5 text-sm font-semibold text-white shadow-[0_6px_18px_-6px_rgb(118_86_201_/_0.6)] transition-colors hover:bg-violet-600"
+            className="inline-flex h-10 shrink-0 items-center justify-center whitespace-nowrap rounded-full bg-violet px-4 text-[13px] font-semibold text-white shadow-[0_6px_18px_-6px_rgb(118_86_201_/_0.6)] transition-colors hover:bg-violet-600 md:h-11 md:px-5 md:text-sm"
           >
-            Essayer gratuitement
+            <span className="md:hidden">Essai gratuit</span>
+            <span className="hidden md:inline">Essayer gratuitement</span>
           </Link>
           {/* Bouton menu mobile */}
           <button
@@ -54,7 +61,7 @@ export function EnteteVitrine() {
             onClick={() => setOuvert((v) => !v)}
             aria-label={ouvert ? "Fermer le menu" : "Ouvrir le menu"}
             aria-expanded={ouvert}
-            className="grid h-11 w-11 place-items-center rounded-full text-prune transition-colors hover:bg-lavande-clair md:hidden"
+            className="grid h-10 w-10 shrink-0 place-items-center rounded-full text-prune transition-colors hover:bg-lavande-clair md:hidden"
           >
             {ouvert ? <X size={20} /> : <Menu size={20} />}
           </button>
