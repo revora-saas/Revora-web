@@ -14,7 +14,7 @@ export function RevoraMark({
     <svg
       width={size}
       height={size}
-      viewBox="0 0 44 44"
+      viewBox="0 0 52 44"
       fill="none"
       className={className}
       aria-hidden
@@ -22,27 +22,27 @@ export function RevoraMark({
       <defs>
         <linearGradient
           id="revora-mark-grad"
-          x1="8"
+          x1="26"
           y1="6"
-          x2="36"
-          y2="38"
+          x2="26"
+          y2="40"
           gradientUnits="userSpaceOnUse"
         >
-          <stop stopColor="#9B7DF0" />
-          <stop offset="1" stopColor="#5A3CE6" />
+          <stop stopColor="#B794F6" />
+          <stop offset="1" stopColor="#6D4CFF" />
         </linearGradient>
       </defs>
-      {/* Pic « A » */}
+      {/* Monogramme « VA » : V à gauche, A à droite, tracé continu */}
       <path
-        d="M7 37 L22 7 L37 37"
+        d="M9 8 L20 37 L27 20 L34 8 L45 37"
         stroke="url(#revora-mark-grad)"
-        strokeWidth="5.5"
+        strokeWidth="5"
         strokeLinecap="round"
         strokeLinejoin="round"
       />
       {/* Barre centrale (accent) */}
       <path
-        d="M15.5 27 L28.5 27"
+        d="M22 32 L31 32"
         stroke="url(#revora-mark-grad)"
         strokeWidth="4.5"
         strokeLinecap="round"
