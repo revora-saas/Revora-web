@@ -4,6 +4,7 @@ import { ArrowRight, Sparkles } from "lucide-react";
 import { Reveal } from "@/components/vitrine/Reveal";
 import { ApercuProduit } from "@/components/vitrine/ApercuProduit";
 import { ExplorerRevora } from "@/components/vitrine/ExplorerRevora";
+import { CarrouselBannieres } from "@/components/vitrine/CarrouselBannieres";
 
 export const metadata: Metadata = {
   title: "Revora — Votre activité beauté, enfin simple à gérer",
@@ -86,6 +87,13 @@ export default function Accueil() {
             </Reveal>
           </div>
         </div>
+      </section>
+
+      {/* ---------- CARROUSEL DE BANNIÈRES ---------- */}
+      <section className="mx-auto max-w-6xl px-5 pb-4">
+        <Reveal>
+          <CarrouselBannieres />
+        </Reveal>
       </section>
 
       {/* ---------- EXPLORER (colonne latérale à tiroirs) ---------- */}
