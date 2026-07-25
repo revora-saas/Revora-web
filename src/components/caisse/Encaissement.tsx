@@ -2,8 +2,11 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import { ArrowLeft, Plus, Trash2, CheckCircle2, Printer } from "lucide-react";
-import { Button, Card } from "@/components/ui";
+import {
+  ArrowLeft, Plus, Trash2, CheckCircle2, Printer,
+  CreditCard, Banknote, ArrowLeftRight, FileText, Link2, Ticket, type LucideIcon,
+} from "lucide-react";
+import { Button } from "@/components/ui";
 import { cn } from "@/lib/utils";
 import {
   encaisser,
@@ -11,13 +14,13 @@ import {
   type PaiementEntree,
 } from "@/app/(app)/caisse/actions";
 
-const MOYENS: { cle: PaiementEntree["moyen"]; label: string }[] = [
-  { cle: "carte", label: "Carte" },
-  { cle: "especes", label: "Espèces" },
-  { cle: "virement", label: "Virement" },
-  { cle: "cheque", label: "Chèque" },
-  { cle: "lien", label: "Lien" },
-  { cle: "avoir", label: "Avoir" },
+const MOYENS: { cle: PaiementEntree["moyen"]; label: string; icone: LucideIcon }[] = [
+  { cle: "carte", label: "Carte bancaire", icone: CreditCard },
+  { cle: "especes", label: "Espèces", icone: Banknote },
+  { cle: "virement", label: "Virement", icone: ArrowLeftRight },
+  { cle: "cheque", label: "Chèque", icone: FileText },
+  { cle: "lien", label: "Lien", icone: Link2 },
+  { cle: "avoir", label: "Avoir", icone: Ticket },
 ];
 
 export function Encaissement({
@@ -117,47 +120,58 @@ export function Encaissement({
       <Link href="/caisse" className="inline-flex items-center gap-1 text-sm text-ink/60 hover:text-ink">
         <ArrowLeft size={16} /> Caisse
       </Link>
-      <h1 className="font-heading text-2xl font-bold text-ink">Encaissement</h1>
-      <p className="text-sm text-ink/60">{clientNom}</p>
+      <div>
+        <h1 className="font-heading text-2xl font-bold text-ink">Encaissement</h1>
+        <p className="mt-0.5 text-sm text-ink/55">{clientNom}</p>
+      </div>
 
       {/* Panier */}
-      <Card className="flex flex-col gap-2">
-        {lignes.map((l, i) => (
-          <div key={i} className="flex items-center gap-2">
-            <input
-              value={l.libelle}
-              onChange={(e) => majLigne(i, { libelle: e.target.value })}
-              className="h-9 flex-1 rounded-[var(--radius-sm)] border border-perle px-2 text-sm"
-            />
-            <input
-              type="number"
-              value={l.quantite}
-              min={1}
-              onChange={(e) => majLigne(i, { quantite: Number(e.target.value) })}
-              className="h-9 w-12 rounded-[var(--radius-sm)] border border-perle px-1 text-center text-sm"
-            />
-            <input
-              type="number"
-              value={l.prix_unitaire}
-              onChange={(e) => majLigne(i, { prix_unitaire: Number(e.target.value) })}
-              className="h-9 w-20 rounded-[var(--radius-sm)] border border-perle px-2 text-right text-sm"
-            />
-            <button onClick={() => retirerLigne(i)} className="text-ink/40 hover:text-red-600">
-              <Trash2 size={16} />
-            </button>
-          </div>
-        ))}
-        <div className="flex flex-wrap gap-2 pt-1">
+      <div className="rounded-[18px] border border-perle bg-white p-4">
+        <div className="flex flex-col gap-2">
+          {lignes.map((l, i) => (
+            <div key={i} className="flex items-center gap-2">
+              <input
+                value={l.libelle}
+                onChange={(e) => majLigne(i, { libelle: e.target.value })}
+                className="h-10 min-w-0 flex-1 rounded-[10px] border border-perle px-2.5 text-sm text-ink focus:border-primary focus:outline-none"
+              />
+              <input
+                type="number"
+                value={l.quantite}
+                min={1}
+                onChange={(e) => majLigne(i, { quantite: Number(e.target.value) })}
+                className="h-10 w-12 rounded-[10px] border border-perle px-1 text-center text-sm focus:border-primary focus:outline-none"
+              />
+              <input
+                type="number"
+                value={l.prix_unitaire}
+                onChange={(e) => majLigne(i, { prix_unitaire: Number(e.target.value) })}
+                className="h-10 w-20 rounded-[10px] border border-perle px-2 text-right text-sm focus:border-primary focus:outline-none"
+              />
+              <button
+                onClick={() => retirerLigne(i)}
+                aria-label="Retirer"
+                className="grid h-9 w-9 shrink-0 place-items-center rounded-full text-ink/40 hover:bg-surface-muted hover:text-terracotta"
+              >
+                <Trash2 size={16} />
+              </button>
+            </div>
+          ))}
+          {lignes.length === 0 && (
+            <p className="py-2 text-center text-sm text-ink/40">Ajoutez une prestation ou un produit.</p>
+          )}
+        </div>
+        <div className="mt-3 flex flex-wrap items-center gap-2 border-t border-perle pt-3">
           {produits.length > 0 && (
             <select
               onChange={(e) => {
                 if (e.target.value) ajouterProduit(e.target.value);
                 e.target.value = "";
               }}
-              className="h-9 rounded-[var(--radius-md)] border border-perle bg-white px-2 text-sm"
+              className="h-10 rounded-[10px] border border-perle bg-white px-2 text-sm text-primary"
               defaultValue=""
             >
-              <option value="">+ Produit</option>
+              <option value="">+ Ajouter un produit</option>
               {produits.map((p) => (
                 <option key={p.id} value={p.id}>
                   {p.nom} ({p.prix} €)
@@ -165,72 +179,82 @@ export function Encaissement({
               ))}
             </select>
           )}
-          <button onClick={ajouterRemise} className="inline-flex items-center gap-1 text-sm font-medium text-primary">
+          <button
+            onClick={ajouterRemise}
+            className="inline-flex items-center gap-1 rounded-full px-3 py-2 text-sm font-medium text-primary hover:bg-primary-50"
+          >
             <Plus size={15} /> Remise
           </button>
         </div>
-      </Card>
+      </div>
 
-      {/* Totaux */}
-      <Card className="flex flex-col gap-1 text-sm">
-        <div className="flex justify-between">
-          <span className="text-ink/60">Total</span>
-          <span className="font-semibold text-ink">{total.toFixed(2)} €</span>
+      {/* Total */}
+      <div className="rounded-[18px] border border-perle bg-white p-4">
+        <div className="flex items-center justify-between">
+          <span className="text-sm font-medium text-ink/70">Total</span>
+          <span className="font-heading text-2xl font-bold text-ink">{total.toFixed(2)} €</span>
         </div>
         {acompteDeduit > 0 && (
-          <div className="flex justify-between">
-            <span className="text-ink/60">Acompte déjà versé</span>
-            <span className="text-green-700">− {acompteDeduit.toFixed(2)} €</span>
+          <div className="mt-2 flex justify-between text-sm">
+            <span className="text-ink/55">Acompte déjà versé</span>
+            <span className="text-sauge">− {acompteDeduit.toFixed(2)} €</span>
           </div>
         )}
-        <div className="flex justify-between border-t border-perle pt-1 text-base font-bold">
-          <span>Reste à payer</span>
-          <span className={reste > 0 ? "text-ink" : "text-green-700"}>{reste.toFixed(2)} €</span>
-        </div>
-      </Card>
+        {(acompteDeduit > 0 || paiements.length > 0) && (
+          <div className="mt-2 flex justify-between border-t border-perle pt-2 text-sm font-semibold">
+            <span className="text-ink">Reste à payer</span>
+            <span className={reste > 0.009 ? "text-ink" : "text-sauge"}>{reste.toFixed(2)} €</span>
+          </div>
+        )}
+      </div>
 
-      {/* Paiements fractionnés */}
-      <Card className="flex flex-col gap-2">
-        <p className="text-sm font-medium text-ink">Paiement</p>
+      {/* Paiement */}
+      <div className="rounded-[18px] border border-perle bg-white p-4">
+        <p className="mb-2 text-sm font-medium text-ink">Paiement</p>
         {paiements.map((p, i) => (
-          <div key={i} className="flex items-center gap-2">
+          <div key={i} className="mb-2 flex items-center gap-2">
             <span className="flex-1 text-sm capitalize text-ink/70">{p.moyen}</span>
             <input
               type="number"
               value={p.montant}
               onChange={(e) => majPaiement(i, Number(e.target.value))}
-              className="h-9 w-24 rounded-[var(--radius-sm)] border border-perle px-2 text-right text-sm"
+              className="h-10 w-24 rounded-[10px] border border-perle px-2 text-right text-sm focus:border-primary focus:outline-none"
             />
             <button
               onClick={() => setPaiements((ps) => ps.filter((_, j) => j !== i))}
-              className="text-ink/40 hover:text-red-600"
+              aria-label="Retirer le paiement"
+              className="grid h-9 w-9 place-items-center rounded-full text-ink/40 hover:bg-surface-muted hover:text-terracotta"
             >
               <Trash2 size={16} />
             </button>
           </div>
         ))}
-        <div className="flex flex-wrap gap-2">
+        <div className="grid grid-cols-3 gap-2">
           {MOYENS.map((m) => (
             <button
               key={m.cle}
               onClick={() => ajouterPaiement(m.cle)}
-              className="rounded-full border border-perle px-3 py-1.5 text-sm font-medium text-ink/70 hover:border-primary"
+              className="flex flex-col items-center gap-1.5 rounded-[14px] border border-perle bg-white px-2 py-3 text-center transition-colors hover:border-primary/40 hover:bg-primary-50/50"
             >
-              + {m.label}
+              <span className="grid h-9 w-9 place-items-center rounded-full bg-primary-50 text-primary">
+                <m.icone size={17} />
+              </span>
+              <span className="text-[11px] font-medium leading-tight text-ink">{m.label}</span>
             </button>
           ))}
         </div>
-      </Card>
+      </div>
 
-      {erreur && <p className="text-sm text-red-600">{erreur}</p>}
-      <Button
-        pleineLargeur
+      {erreur && <p className="text-sm text-terracotta">{erreur}</p>}
+      <button
         onClick={valider}
         disabled={chargement || lignes.length === 0}
-        className={cn(reste > 0.009 && "opacity-90")}
+        className={cn(
+          "inline-flex h-14 w-full items-center justify-center rounded-full bg-primary text-base font-semibold text-white shadow-[0_12px_28px_-10px_rgb(109_76_255_/_0.7)] transition-colors hover:bg-primary-600 disabled:opacity-60",
+        )}
       >
         {chargement ? "Encaissement…" : reste > 0.009 ? `Encaisser (reste ${reste.toFixed(2)} €)` : "Encaisser"}
-      </Button>
+      </button>
     </div>
   );
 }
