@@ -40,17 +40,19 @@
      premium, lumineuse). N'affecte pas les écrans de l'app, qui
      continuent d'utiliser --color-primary / --color-ink ci-dessus.
      ============================================================= */
-  --color-violet: #7656c9;         /* Violet principal de marque (boutons, liens, logo) */
-  --color-violet-600: #6544b5;     /* Survol du violet */
-  --color-prune: #3c2d4a;          /* Violet prune profond : titres, texte fort */
-  --color-lavande-clair: #f1ecf8;  /* Lavande très claire : fonds doux, pastilles */
-  --color-ivoire: #fffaf8;         /* Fond ivoire rosé : fond principal de la vitrine */
-  --color-peche: #f2a994;          /* Pêche discret : accents chaleureux ponctuels */
-  --color-peche-clair: #fcefe9;    /* Pêche très clair : fond de la section CTA finale */
-  --color-taupe: #766d7b;          /* Texte secondaire taupe violet */
-  --color-sauge: #809889;          /* Vert sauge : statuts positifs */
-  --color-terracotta: #c76862;     /* Terracotta : alertes */
-  --color-bordure: #e4ddeb;        /* Bordures douces */
+  /* Alignées sur la palette de l'application (écrans connectés) :
+     violet #6D4CFF, bleu nuit, gris perle. Pas de pêche. */
+  --color-violet: #6d4cff;         /* = primary de l'app */
+  --color-violet-600: #5a3ce6;     /* survol */
+  --color-prune: #0b1020;          /* = ink (texte fort) */
+  --color-lavande-clair: #f3f0ff;  /* = primary-50 (fonds doux, pastilles) */
+  --color-ivoire: #f7f7fb;         /* = surface-muted (fond de la vitrine) */
+  --color-peche: #6d4cff;          /* pêche supprimé → violet */
+  --color-peche-clair: #f3f0ff;    /* pêche supprimé → violet très clair */
+  --color-taupe: #5b6172;          /* texte secondaire (proche de ink/60) */
+  --color-sauge: #2f9e77;          /* statuts positifs (vert) */
+  --color-terracotta: #c76862;     /* alertes */
+  --color-bordure: #e6e8ef;        /* = perle */
 
   /* --- Rayons (bords arrondis, style épuré) --- */
   --radius-sm: 0.5rem;

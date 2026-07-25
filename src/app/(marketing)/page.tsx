@@ -47,25 +47,22 @@ export default function Accueil() {
         Revora — le logiciel des professionnelles de la beauté
       </h1>
 
-      {/* Bandeau promotionnel */}
-      <div className="border-b border-bordure bg-peche-clair">
-        <div className="mx-auto flex max-w-6xl flex-wrap items-center justify-center gap-x-2.5 gap-y-1 px-5 py-2.5 text-center text-sm">
-          <span className="font-semibold text-prune">🎁 30 jours gratuits</span>
-          <span className="text-taupe">· Sans carte bancaire</span>
-          <Link
-            href="/inscription"
-            className="inline-flex items-center gap-1 font-semibold text-violet transition-colors hover:text-violet-600"
-          >
-            Démarrer <ArrowRight size={14} />
-          </Link>
+      {/* Bandeau promotionnel — une seule ligne, cliquable */}
+      <Link
+        href="/inscription"
+        className="block border-b border-perle bg-primary-50 transition-colors hover:bg-primary-100"
+      >
+        <div className="mx-auto flex max-w-6xl items-center justify-center gap-1.5 overflow-hidden whitespace-nowrap px-3 py-2 text-[13px] font-medium sm:text-sm">
+          <span aria-hidden>🎁</span>
+          <span className="font-semibold text-ink">30 jours gratuits</span>
+          <span className="text-ink/55">· sans carte bancaire</span>
+          <ArrowRight size={14} className="shrink-0 text-primary" />
         </div>
-      </div>
+      </Link>
 
-      {/* Grand carrousel de bannières */}
-      <section className="px-3 pt-6 sm:px-6 sm:pt-10">
-        <div className="mx-auto max-w-[1500px]">
-          <CarrouselBannieres />
-        </div>
+      {/* Grand carrousel de bannières — pleine largeur */}
+      <section className="w-full pt-3 sm:pt-4">
+        <CarrouselBannieres />
       </section>
 
       {/* Offres */}

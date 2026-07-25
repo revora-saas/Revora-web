@@ -35,7 +35,7 @@ export function CarrouselBannieres() {
 
   return (
     <div
-      className="relative overflow-hidden rounded-[18px] border border-bordure bg-prune shadow-[0_4px_12px_rgb(60_45_74_/_0.08),0_40px_80px_-40px_rgb(60_45_74_/_0.5)] sm:rounded-[28px]"
+      className="relative w-full overflow-hidden bg-prune"
       role="region"
       aria-roledescription="carrousel"
       aria-label="Bannières Revora"
@@ -64,7 +64,7 @@ export function CarrouselBannieres() {
               alt={b.alt}
               fill
               draggable={false}
-              sizes="(max-width: 1500px) 100vw, 1500px"
+              sizes="100vw"
               className="object-cover"
               priority={i === 0}
             />
