@@ -54,8 +54,7 @@ export default function Accueil() {
               Votre activité beauté, enfin simple à gérer.
             </h1>
             <p className="mt-5 max-w-md text-lg leading-relaxed text-taupe">
-              Agenda intelligent, dossiers clients, acomptes et suivi métier réunis dans un
-              seul espace.
+              Un seul espace clair pour piloter tout votre quotidien de professionnelle.
             </p>
             <div className="mt-8 flex flex-col gap-3 sm:flex-row">
               <Link
@@ -106,27 +105,6 @@ export default function Accueil() {
         <div className="mt-10">
           <ExplorerRevora />
         </div>
-      </section>
-
-      {/* ---------- CTA FINAL ---------- */}
-      <section className="mx-auto max-w-6xl px-5 pb-20">
-        <Reveal>
-          <div className="rounded-[28px] bg-peche-clair px-6 py-14 text-center sm:px-10 sm:py-16">
-            <h2 className="mx-auto max-w-lg font-serif text-3xl font-medium text-prune sm:text-4xl">
-              Prête à simplifier votre quotidien ?
-            </h2>
-            <p className="mx-auto mt-3 max-w-md text-taupe">
-              Configurez votre espace Revora en quelques minutes.
-            </p>
-            <Link
-              href="/inscription"
-              className="mt-8 inline-flex h-12 items-center justify-center gap-2 rounded-full bg-violet px-7 font-semibold text-white shadow-[0_10px_24px_-8px_rgb(118_86_201_/_0.65)] transition-colors hover:bg-violet-600"
-            >
-              Commencer gratuitement <ArrowRight size={18} />
-            </Link>
-            <p className="mt-4 text-sm text-taupe">30 jours gratuits · Sans carte bancaire</p>
-          </div>
-        </Reveal>
       </section>
     </>
   );

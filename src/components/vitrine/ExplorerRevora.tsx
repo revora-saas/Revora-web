@@ -1,9 +1,7 @@
 "use client";
 
 import { useRef, useState } from "react";
-import Link from "next/link";
 import {
-  ArrowRight,
   BellRing,
   CalendarDays,
   Check,
@@ -12,7 +10,6 @@ import {
   Sparkles,
   Wallet,
 } from "lucide-react";
-import { ApercuProduit } from "./ApercuProduit";
 import { ListeAttenteDemo } from "./ListeAttenteDemo";
 import { MetiersTabs } from "./MetiersTabs";
 
@@ -184,12 +181,6 @@ function Panneau({ section }: { section: (typeof SECTIONS)[number] }) {
                 </li>
               ))}
             </ul>
-            <Link
-              href="/fonctionnalites"
-              className="mt-6 inline-flex items-center gap-1.5 text-sm font-semibold text-violet transition-colors hover:text-violet-600"
-            >
-              Voir toutes les fonctionnalités <ArrowRight size={15} />
-            </Link>
           </div>
           <VisuelSection id={section.id} />
         </div>
@@ -199,10 +190,44 @@ function Panneau({ section }: { section: (typeof SECTIONS)[number] }) {
 }
 
 function VisuelSection({ id }: { id: SectionId }) {
-  if (id === "agenda") return <ApercuProduit />;
+  if (id === "agenda") return <SemaineMock />;
   if (id === "anti") return <ListeAttenteDemo />;
   if (id === "dossier") return <FicheMock />;
   return <CaisseMock />;
+}
+
+/** Mini-aperçu « vue semaine » (illustration d'interface, distinct du hero). */
+function SemaineMock() {
+  const jours = ["L", "M", "M", "J", "V", "S", "D"];
+  const blocs: { c: string; h: string }[][] = [
+    [{ c: "bg-violet/80", h: "h-8" }, { c: "bg-lavande-clair", h: "h-5" }],
+    [{ c: "bg-peche/70", h: "h-6" }],
+    [{ c: "bg-violet/80", h: "h-11" }],
+    [{ c: "bg-lavande-clair", h: "h-5" }, { c: "bg-violet/80", h: "h-8" }],
+    [{ c: "bg-violet/80", h: "h-6" }],
+    [{ c: "bg-peche/70", h: "h-12" }],
+    [],
+  ];
+  return (
+    <div className="rounded-[22px] border border-bordure bg-white p-4 shadow-[0_2px_8px_rgb(60_45_74_/_0.04),0_24px_50px_-32px_rgb(60_45_74_/_0.2)]">
+      <div className="flex items-center justify-between">
+        <p className="font-heading text-sm font-semibold text-prune">Votre semaine</p>
+        <span className="text-[11px] text-taupe">Vue d&apos;ensemble</span>
+      </div>
+      <div className="mt-3 grid grid-cols-7 gap-1.5">
+        {jours.map((j, i) => (
+          <div key={i} className="flex flex-col items-center gap-1">
+            <span className="text-[10px] font-medium text-taupe">{j}</span>
+            <div className="flex min-h-[68px] w-full flex-col gap-1 rounded-[9px] bg-ivoire p-1">
+              {blocs[i].map((b, k) => (
+                <span key={k} className={`w-full rounded-[5px] ${b.c} ${b.h}`} />
+              ))}
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
 }
 
 /** Mini-aperçu « fiche cliente » (illustration d'interface). */
