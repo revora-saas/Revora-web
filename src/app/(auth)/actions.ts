@@ -149,10 +149,23 @@ export async function definirNouveauMotDePasse(motDePasse: string): Promise<Resu
 // Complétion de profil (après connexion sociale ou inscription)
 // ---------------------------------------------------------------------
 
+// --- Mode test OTP (tant que Twilio n'est pas branché) ---------------
+// Activé par la variable d'environnement OTP_TEST_MODE=1. Le code de test
+// (OTP_TEST_CODE, défaut « 123456 ») est alors accepté sans envoi de SMS,
+// pour pouvoir tester l'inscription sans SMS réel.
+// ⚠️ À DÉSACTIVER en production réelle (retirer OTP_TEST_MODE dès que Twilio
+// est configuré) : sinon n'importe qui valide un numéro avec le code de test.
+const MODE_OTP_TEST =
+  process.env.OTP_TEST_MODE === "1" || process.env.OTP_TEST_MODE === "true";
+const CODE_OTP_TEST = process.env.OTP_TEST_CODE ?? "123456";
+
 /** Étape 1 : rattache le téléphone au compte et déclenche l'envoi du code OTP. */
 export async function envoyerCodeTelephone(telephone: string): Promise<Resultat> {
   const e164 = normaliserTelephoneFr(telephone);
   if (!e164) return { ok: false, erreur: "Numéro de téléphone invalide." };
+
+  // Mode test : on saute l'envoi du SMS (Twilio non branché).
+  if (MODE_OTP_TEST) return { ok: true };
 
   const supabase = await creerClientServeur();
   const { error } = await supabase.auth.updateUser({ phone: e164 });
@@ -185,12 +198,15 @@ export async function finaliserProfil(donnees: {
   const supabase = await creerClientServeur();
 
   // 1. Vérifie le code : confirme le rattachement du téléphone au compte.
-  const { error: errOtp } = await supabase.auth.verifyOtp({
-    phone: e164,
-    token: v.data.code.trim(),
-    type: "phone_change",
-  });
-  if (errOtp) return { ok: false, erreur: "Code incorrect ou expiré." };
+  //    En mode test, le code de test est accepté sans vérification SMS.
+  if (!(MODE_OTP_TEST && v.data.code.trim() === CODE_OTP_TEST)) {
+    const { error: errOtp } = await supabase.auth.verifyOtp({
+      phone: e164,
+      token: v.data.code.trim(),
+      type: "phone_change",
+    });
+    if (errOtp) return { ok: false, erreur: "Code incorrect ou expiré." };
+  }
 
   const {
     data: { user },
