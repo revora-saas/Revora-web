@@ -27,6 +27,7 @@ export interface Finance {
   nouvellesClientes: number;
   topPrestations: { libelle: string; nb: number }[];
   depensesMois: number;
+  serie7j: { label: string; valeur: number }[];
 }
 
 /** Somme des encaissements (hors annulés) sur une période UTC. */
@@ -50,7 +51,7 @@ export async function getFinance(): Promise<Finance> {
   const ctx = await contexteEtablissement();
   const vide: Finance = {
     caJour: 0, caJourPrec: 0, caSemaine: 0, caSemainePrec: 0, caMois: 0, caMoisPrec: 0,
-    nouvellesClientes: 0, topPrestations: [], depensesMois: 0,
+    nouvellesClientes: 0, topPrestations: [], depensesMois: 0, serie7j: [],
   };
   if (!ctx) return vide;
   const { supabase, etablissementId: etab } = ctx;
@@ -111,9 +112,23 @@ export async function getFinance(): Promise<Finance> {
     .lt("date_depense", moisFin);
   const depensesMois = (dep ?? []).reduce((s, d) => s + Number(d.montant), 0);
 
+  // Série des 7 derniers jours (CA quotidien réel) pour le graphique.
+  const LETTRES = ["D", "L", "M", "M", "J", "V", "S"];
+  const jours7 = Array.from({ length: 7 }, (_, k) => {
+    const i = 6 - k; // du plus ancien au plus récent
+    return { debut: jourLocal(-i), fin: jourLocal(-i + 1) };
+  });
+  const valeurs7 = await Promise.all(
+    jours7.map(({ debut, fin }) => ca(supabase, etab, ...bornesUtc(debut, fin))),
+  );
+  const serie7j = jours7.map(({ debut }, i) => ({
+    label: LETTRES[new Date(`${debut}T12:00:00Z`).getUTCDay()],
+    valeur: valeurs7[i],
+  }));
+
   return {
     caJour, caJourPrec, caSemaine, caSemainePrec, caMois, caMoisPrec,
-    nouvellesClientes: nouvellesClientes ?? 0, topPrestations, depensesMois,
+    nouvellesClientes: nouvellesClientes ?? 0, topPrestations, depensesMois, serie7j,
   };
 }
 
