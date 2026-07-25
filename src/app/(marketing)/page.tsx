@@ -1,10 +1,8 @@
 import Link from "next/link";
 import type { Metadata } from "next";
-import { ArrowRight, Sparkles } from "lucide-react";
-import { Reveal } from "@/components/vitrine/Reveal";
-import { ApercuProduit } from "@/components/vitrine/ApercuProduit";
-import { ExplorerRevora } from "@/components/vitrine/ExplorerRevora";
+import { ArrowRight } from "lucide-react";
 import { CarrouselBannieres } from "@/components/vitrine/CarrouselBannieres";
+import { OffresRevora } from "@/components/vitrine/OffresRevora";
 
 export const metadata: Metadata = {
   title: "Revora — Votre activité beauté, enfin simple à gérer",
@@ -44,75 +42,35 @@ export default function Accueil() {
         dangerouslySetInnerHTML={{ __html: JSON.stringify(JSONLD) }}
       />
 
-      {/* ---------- HERO ---------- */}
-      <section className="mx-auto max-w-6xl px-5 pb-16 pt-12 sm:pt-16">
-        <div className="grid items-center gap-12 lg:grid-cols-2 lg:gap-10">
-          <div>
-            <span className="inline-flex items-center gap-1.5 rounded-full border border-bordure bg-white px-3 py-1.5 text-xs font-medium text-violet">
-              <Sparkles size={13} /> Pensé pour les professionnelles de la beauté
-            </span>
-            <h1 className="mt-5 font-serif text-4xl font-medium leading-[1.1] text-prune sm:text-5xl lg:text-[3.4rem]">
-              Votre activité beauté, enfin simple à gérer.
-            </h1>
-            <p className="mt-5 max-w-md text-lg leading-relaxed text-taupe">
-              Un seul espace clair pour piloter tout votre quotidien de professionnelle.
-            </p>
-            <div className="mt-8 flex flex-col gap-3 sm:flex-row">
-              <Link
-                href="/inscription"
-                className="inline-flex h-12 items-center justify-center gap-2 rounded-full bg-violet px-6 font-semibold text-white shadow-[0_10px_24px_-8px_rgb(118_86_201_/_0.65)] transition-colors hover:bg-violet-600"
-              >
-                Démarrer gratuitement <ArrowRight size={18} />
-              </Link>
-              <Link
-                href="#explorer"
-                className="inline-flex h-12 items-center justify-center rounded-full border border-bordure bg-white px-6 font-semibold text-prune transition-colors hover:border-violet/40"
-              >
-                Découvrir l&apos;interface
-              </Link>
-            </div>
-            <p className="mt-4 text-sm text-taupe">
-              30 jours gratuits · Sans carte bancaire · Configuration rapide
-            </p>
-          </div>
+      {/* Titre pour le référencement / lecteurs d'écran (non affiché) */}
+      <h1 className="sr-only">
+        Revora — le logiciel des professionnelles de la beauté
+      </h1>
 
-          {/* Aperçu produit */}
-          <div className="relative">
-            <div
-              aria-hidden
-              className="absolute -inset-4 -z-10 rounded-[36px] bg-lavande-clair/70 sm:-inset-6"
-            />
-            <Reveal delay={80}>
-              <ApercuProduit />
-            </Reveal>
-          </div>
+      {/* Bandeau promotionnel */}
+      <div className="border-b border-bordure bg-peche-clair">
+        <div className="mx-auto flex max-w-6xl flex-wrap items-center justify-center gap-x-2.5 gap-y-1 px-5 py-2.5 text-center text-sm">
+          <span className="font-semibold text-prune">🎁 30 jours gratuits</span>
+          <span className="text-taupe">· Sans carte bancaire</span>
+          <Link
+            href="/inscription"
+            className="inline-flex items-center gap-1 font-semibold text-violet transition-colors hover:text-violet-600"
+          >
+            Démarrer <ArrowRight size={14} />
+          </Link>
         </div>
-      </section>
+      </div>
 
-      {/* ---------- CARROUSEL DE BANNIÈRES ---------- */}
-      <section className="mx-auto max-w-6xl px-5 pb-4">
-        <Reveal>
+      {/* Grand carrousel de bannières */}
+      <section className="px-3 pt-6 sm:px-6 sm:pt-10">
+        <div className="mx-auto max-w-[1500px]">
           <CarrouselBannieres />
-        </Reveal>
+        </div>
       </section>
 
-      {/* ---------- EXPLORER (colonne latérale à tiroirs) ---------- */}
-      <section
-        id="explorer"
-        className="mx-auto max-w-6xl scroll-mt-20 px-5 py-16 sm:py-20"
-      >
-        <Reveal className="max-w-2xl">
-          <h2 className="font-serif text-3xl font-medium text-prune sm:text-4xl">
-            Tout ce qu&apos;il faut, sans complexité.
-          </h2>
-          <p className="mt-3 text-taupe">
-            Choisissez un tiroir pour découvrir ce que Revora fait, sans surcharge.
-          </p>
-        </Reveal>
-
-        <div className="mt-10">
-          <ExplorerRevora />
-        </div>
+      {/* Offres */}
+      <section className="mx-auto max-w-6xl px-5 py-14 sm:py-16">
+        <OffresRevora voirToutes />
       </section>
     </>
   );
