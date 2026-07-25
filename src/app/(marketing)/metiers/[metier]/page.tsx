@@ -35,34 +35,34 @@ export default async function PageMetier({
   return (
     <>
       <section className="mx-auto max-w-6xl px-5 pb-12 pt-16">
-        <Link href="/metiers" className="text-sm text-white/50 hover:text-white">
+        <Link href="/metiers" className="text-sm text-taupe transition-colors hover:text-prune">
           ← Tous les métiers
         </Link>
-        <p className="mt-6 text-sm font-semibold uppercase tracking-wide text-lavande">{m.nom}</p>
-        <h1 className="mt-2 max-w-3xl font-heading text-4xl font-bold leading-tight sm:text-5xl">
+        <p className="mt-6 text-sm font-semibold uppercase tracking-wide text-violet">{m.nom}</p>
+        <h1 className="mt-2 max-w-3xl font-serif text-4xl font-medium leading-[1.1] text-prune sm:text-5xl">
           {m.accroche}
         </h1>
-        <p className="mt-5 max-w-xl text-lg text-white/70">{m.intro}</p>
+        <p className="mt-5 max-w-xl text-lg text-taupe">{m.intro}</p>
         <Link
           href="/inscription"
-          className="mt-8 inline-flex items-center gap-2 rounded-[var(--radius-md)] bg-primary px-6 py-3 font-medium hover:bg-primary-600"
+          className="mt-8 inline-flex h-12 items-center gap-2 rounded-full bg-violet px-6 font-semibold text-white shadow-[0_10px_24px_-8px_rgb(118_86_201_/_0.65)] transition-colors hover:bg-violet-600"
         >
           Essayer gratuitement <ArrowRight size={18} />
         </Link>
       </section>
 
-      <section className="border-t border-white/10 bg-white/[0.03]">
+      <section className="border-y border-bordure bg-lavande-clair/40">
         <div className="mx-auto max-w-6xl px-5 py-16">
-          <h2 className="font-heading text-2xl font-bold">Ce que Revora fait pour vous</h2>
-          <div className="mt-8 grid gap-5 sm:grid-cols-2">
+          <h2 className="font-serif text-2xl font-medium text-prune sm:text-3xl">Ce que Revora fait pour vous</h2>
+          <div className="mt-8 grid gap-4 sm:grid-cols-2 sm:gap-5">
             {m.fonctions.map((f) => (
-              <div key={f.titre} className="flex gap-3 rounded-[var(--radius-lg)] border border-white/10 bg-white/5 p-5">
-                <span className="mt-0.5 flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-primary">
+              <div key={f.titre} className="flex gap-3 rounded-[20px] border border-bordure bg-white p-5">
+                <span className="mt-0.5 grid h-6 w-6 shrink-0 place-items-center rounded-full bg-violet text-white">
                   <Check size={14} />
                 </span>
                 <div>
-                  <h3 className="font-heading font-semibold">{f.titre}</h3>
-                  <p className="mt-1 text-sm text-white/60">{f.texte}</p>
+                  <h3 className="font-heading font-semibold text-prune">{f.titre}</h3>
+                  <p className="mt-1 text-sm leading-relaxed text-taupe">{f.texte}</p>
                 </div>
               </div>
             ))}
@@ -71,11 +71,11 @@ export default async function PageMetier({
       </section>
 
       <section className="mx-auto max-w-6xl px-5 py-16 text-center">
-        <h2 className="font-heading text-2xl font-bold">Prête à essayer Revora ?</h2>
-        <p className="mx-auto mt-2 max-w-md text-white/60">30 jours gratuits, configuration en 10 minutes.</p>
+        <h2 className="font-serif text-2xl font-medium text-prune sm:text-3xl">Prête à essayer Revora ?</h2>
+        <p className="mx-auto mt-2 max-w-md text-taupe">30 jours gratuits, configuration en quelques minutes.</p>
         <Link
           href="/inscription"
-          className="mt-6 inline-flex items-center gap-2 rounded-[var(--radius-md)] bg-primary px-6 py-3 font-medium hover:bg-primary-600"
+          className="mt-6 inline-flex h-12 items-center gap-2 rounded-full bg-violet px-6 font-semibold text-white shadow-[0_10px_24px_-8px_rgb(118_86_201_/_0.65)] transition-colors hover:bg-violet-600"
         >
           Commencer <ArrowRight size={18} />
         </Link>

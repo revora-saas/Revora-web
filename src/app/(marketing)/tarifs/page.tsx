@@ -10,7 +10,7 @@ export const metadata: Metadata = {
 
 const INCLUS = [
   "Agenda et réservation en ligne illimités",
-  "Système anti no-show complet",
+  "Système anti-désistement complet",
   "Base clientes, import et export",
   "Caisse, acomptes et suivi financier",
   "Stock, lots et péremption",
@@ -30,49 +30,49 @@ export default function PageTarifs() {
   return (
     <>
       <section className="mx-auto max-w-6xl px-5 pb-8 pt-16 text-center">
-        <h1 className="font-heading text-4xl font-bold sm:text-5xl">Un tarif simple et transparent</h1>
-        <p className="mx-auto mt-4 max-w-xl text-lg text-white/70">
+        <h1 className="font-serif text-4xl font-medium text-prune sm:text-5xl">Un tarif simple et transparent</h1>
+        <p className="mx-auto mt-4 max-w-xl text-lg text-taupe">
           Une offre unique, tout compris. Essai gratuit de 30 jours.
         </p>
       </section>
 
       <section className="mx-auto max-w-3xl px-5 py-8">
-        <div className="rounded-[var(--radius-xl)] border border-lavande/30 bg-white/5 p-8">
-          <p className="text-sm font-semibold uppercase tracking-wide text-lavande">Indépendante</p>
+        <div className="rounded-[26px] border border-bordure bg-white p-8 shadow-[0_2px_8px_rgb(60_45_74_/_0.04),0_24px_50px_-30px_rgb(60_45_74_/_0.18)]">
+          <p className="text-sm font-semibold uppercase tracking-wide text-violet">Indépendante</p>
           <div className="mt-3 flex items-end gap-4">
             <div>
-              <p className="font-heading text-4xl font-bold">Mensuel</p>
-              <p className="text-sm text-white/50">sans engagement</p>
+              <p className="font-heading text-3xl font-bold text-prune">Mensuel</p>
+              <p className="text-sm text-taupe">sans engagement</p>
             </div>
-            <div className="border-l border-white/10 pl-4">
-              <p className="font-heading text-4xl font-bold">Annuel</p>
-              <p className="text-sm text-lavande">2 mois offerts</p>
+            <div className="border-l border-bordure pl-4">
+              <p className="font-heading text-3xl font-bold text-prune">Annuel</p>
+              <p className="text-sm text-violet">2 mois offerts</p>
             </div>
           </div>
-          <ul className="mt-6 grid gap-2 sm:grid-cols-2">
+          <ul className="mt-6 grid gap-2.5 sm:grid-cols-2">
             {INCLUS.map((i) => (
-              <li key={i} className="flex items-start gap-2 text-sm text-white/80">
-                <Check size={16} className="mt-0.5 shrink-0 text-lavande" /> {i}
+              <li key={i} className="flex items-start gap-2 text-sm text-prune">
+                <Check size={16} className="mt-0.5 shrink-0 text-violet" /> {i}
               </li>
             ))}
           </ul>
           <Link
             href="/inscription"
-            className="mt-8 inline-flex w-full items-center justify-center gap-2 rounded-[var(--radius-md)] bg-primary px-6 py-3 font-medium hover:bg-primary-600"
+            className="mt-8 inline-flex h-12 w-full items-center justify-center gap-2 rounded-full bg-violet px-6 font-semibold text-white transition-colors hover:bg-violet-600"
           >
             Commencer l&apos;essai gratuit <ArrowRight size={18} />
           </Link>
-          <p className="mt-3 text-center text-xs text-white/40">30 jours · sans carte bancaire</p>
+          <p className="mt-3 text-center text-xs text-taupe">30 jours · sans carte bancaire</p>
         </div>
       </section>
 
       <section className="mx-auto max-w-3xl px-5 py-16">
-        <h2 className="font-heading text-2xl font-bold">Questions fréquentes</h2>
-        <div className="mt-6 flex flex-col gap-4">
+        <h2 className="font-serif text-2xl font-medium text-prune sm:text-3xl">Questions fréquentes</h2>
+        <div className="mt-6 flex flex-col gap-3">
           {FAQ.map((f) => (
-            <div key={f.q} className="rounded-[var(--radius-lg)] border border-white/10 bg-white/5 p-5">
-              <h3 className="font-heading font-semibold">{f.q}</h3>
-              <p className="mt-1 text-sm text-white/60">{f.r}</p>
+            <div key={f.q} className="rounded-[20px] border border-bordure bg-white p-5">
+              <h3 className="font-heading font-semibold text-prune">{f.q}</h3>
+              <p className="mt-1 text-sm leading-relaxed text-taupe">{f.r}</p>
             </div>
           ))}
         </div>

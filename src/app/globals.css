@@ -32,6 +32,25 @@
   /* --- Polices (chargées via next/font dans layout.tsx) --- */
   --font-sans: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
   --font-heading: var(--font-poppins), var(--font-inter), ui-sans-serif, sans-serif;
+  /* Serif moderne réservée aux grands titres de la vitrine (identité premium). */
+  --font-serif: var(--font-fraunces), ui-serif, Georgia, "Times New Roman", serif;
+
+  /* =============================================================
+     Palette VITRINE (landing publique uniquement — beauté-tech
+     premium, lumineuse). N'affecte pas les écrans de l'app, qui
+     continuent d'utiliser --color-primary / --color-ink ci-dessus.
+     ============================================================= */
+  --color-violet: #7656c9;         /* Violet principal de marque (boutons, liens, logo) */
+  --color-violet-600: #6544b5;     /* Survol du violet */
+  --color-prune: #3c2d4a;          /* Violet prune profond : titres, texte fort */
+  --color-lavande-clair: #f1ecf8;  /* Lavande très claire : fonds doux, pastilles */
+  --color-ivoire: #fffaf8;         /* Fond ivoire rosé : fond principal de la vitrine */
+  --color-peche: #f2a994;          /* Pêche discret : accents chaleureux ponctuels */
+  --color-peche-clair: #fcefe9;    /* Pêche très clair : fond de la section CTA finale */
+  --color-taupe: #766d7b;          /* Texte secondaire taupe violet */
+  --color-sauge: #809889;          /* Vert sauge : statuts positifs */
+  --color-terracotta: #c76862;     /* Terracotta : alertes */
+  --color-bordure: #e4ddeb;        /* Bordures douces */
 
   /* --- Rayons (bords arrondis, style épuré) --- */
   --radius-sm: 0.5rem;
@@ -59,4 +78,39 @@ body {
 
 h1, h2, h3, h4, h5, h6 {
   font-family: var(--font-heading);
+}
+
+/* =====================================================================
+   VITRINE — apparitions douces au défilement et micro-interactions.
+   Aucune animation permanente ; respect de prefers-reduced-motion.
+   ===================================================================== */
+.v-reveal {
+  opacity: 0;
+  transform: translateY(18px);
+  transition: opacity 0.7s cubic-bezier(0.22, 1, 0.36, 1),
+    transform 0.7s cubic-bezier(0.22, 1, 0.36, 1);
+  will-change: opacity, transform;
+}
+.v-reveal.is-visible {
+  opacity: 1;
+  transform: none;
+}
+
+/* Pulsation très légère de la pastille de notification (maquette produit). */
+@keyframes v-halo {
+  0%, 100% { box-shadow: 0 0 0 0 rgb(242 169 148 / 0.45); }
+  50% { box-shadow: 0 0 0 8px rgb(242 169 148 / 0); }
+}
+.v-halo { animation: v-halo 2.8s ease-in-out infinite; }
+
+/* Entrée douce d'un élément de la démo liste d'attente. */
+@keyframes v-pop {
+  from { opacity: 0; transform: translateY(6px) scale(0.98); }
+  to { opacity: 1; transform: none; }
+}
+.v-pop { animation: v-pop 0.5s ease both; }
+
+@media (prefers-reduced-motion: reduce) {
+  .v-reveal { opacity: 1; transform: none; transition: none; }
+  .v-halo, .v-pop { animation: none; }
 }

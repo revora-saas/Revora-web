@@ -1,16 +1,26 @@
 import Link from "next/link";
 import type { Metadata } from "next";
-import { BellRing, CalendarCheck, ShieldCheck, ArrowRight, Star } from "lucide-react";
-import { METIERS_VITRINE } from "@/lib/vitrine-metiers";
+import {
+  ArrowRight,
+  BellRing,
+  CalendarDays,
+  ClipboardList,
+  Sparkles,
+  Wallet,
+} from "lucide-react";
+import { Reveal } from "@/components/vitrine/Reveal";
+import { ApercuProduit } from "@/components/vitrine/ApercuProduit";
+import { ListeAttenteDemo } from "@/components/vitrine/ListeAttenteDemo";
+import { MetiersTabs } from "@/components/vitrine/MetiersTabs";
 
 export const metadata: Metadata = {
-  title: "Revora — Le logiciel adapté à tous les professionnels de la beauté",
+  title: "Revora — Votre activité beauté, enfin simple à gérer",
   description:
-    "Rendez-vous, clientes, caisse, stock et traçabilité. Un système anti no-show complet : rappels, acompte, score de fiabilité, liste d'attente. Essai gratuit 30 jours.",
+    "Agenda intelligent, dossiers clients, acomptes et suivi métier réunis dans un seul espace. Pensé pour les professionnelles de la beauté. Essai gratuit 30 jours.",
   openGraph: {
-    title: "Revora — Le logiciel adapté à tous les professionnels de la beauté",
+    title: "Revora — Votre activité beauté, enfin simple à gérer",
     description:
-      "Un système anti no-show complet et la profondeur métier que les généralistes n'ont pas.",
+      "Agenda intelligent, dossiers clients, acomptes et suivi métier réunis dans un seul espace.",
     type: "website",
     locale: "fr_FR",
   },
@@ -23,149 +33,199 @@ const JSONLD = {
   applicationCategory: "BusinessApplication",
   operatingSystem: "Web, iOS, Android (PWA)",
   description:
-    "Logiciel de gestion pour professionnels de la beauté en France : agenda, clientes, caisse, stock, traçabilité PMU et anti no-show.",
-  offers: { "@type": "Offer", price: "0", priceCurrency: "EUR", description: "Essai gratuit 30 jours" },
+    "Logiciel de gestion pour professionnels de la beauté en France : agenda, dossiers clients, acomptes, liste d'attente intelligente et suivi métier.",
+  offers: {
+    "@type": "Offer",
+    price: "0",
+    priceCurrency: "EUR",
+    description: "Essai gratuit 30 jours",
+  },
   areaServed: "FR",
 };
+
+const FONCTIONS = [
+  {
+    icone: CalendarDays,
+    titre: "Agenda intelligent",
+    texte: "Gérez les horaires, prestations, pauses et disponibilités de chaque professionnelle.",
+  },
+  {
+    icone: BellRing,
+    titre: "Anti-désistement",
+    texte: "Rappels, acompte, confirmations et liste d'attente pour limiter les créneaux perdus.",
+  },
+  {
+    icone: ClipboardList,
+    titre: "Dossier client",
+    texte: "Historique, photos, notes, consentements et préférences réunis au même endroit.",
+  },
+  {
+    icone: Wallet,
+    titre: "Gestion quotidienne",
+    texte: "Caisse, paiements, stocks et suivi de l'activité sans multiplier les outils.",
+  },
+];
+
+const ETAPES = [
+  { n: "1", titre: "Un rendez-vous est annulé", texte: "Le créneau se libère dans votre agenda." },
+  { n: "2", titre: "Revora sélectionne", texte: "Les clientes compatibles selon prestation, disponibilité et délai de déplacement." },
+  { n: "3", titre: "Le créneau est réattribué", texte: "Il est proposé, puis attribué après confirmation." },
+];
 
 export default function Accueil() {
   return (
     <>
-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(JSONLD) }} />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(JSONLD) }}
+      />
 
-      {/* Héro */}
-      <section className="mx-auto max-w-6xl px-5 pb-20 pt-16 sm:pt-24">
-        <p className="mb-4 inline-block rounded-full bg-white/10 px-3 py-1 text-xs font-medium text-lavande">
-          Le logiciel adapté à tous les professionnels de la beauté
-        </p>
-        <h1 className="max-w-3xl font-heading text-4xl font-bold leading-tight sm:text-6xl">
-          Vos rendez-vous, vos clientes, votre caisse —{" "}
-          <span className="bg-gradient-to-r from-lavande to-primary bg-clip-text text-transparent">
-            sans les lapins.
-          </span>
-        </h1>
-        <p className="mt-6 max-w-xl text-lg text-white/70">
-          Un système anti no-show complet — rappels, acompte, score de fiabilité, liste
-          d&apos;attente auto-remplissante — et la profondeur métier que les généralistes
-          n&apos;ont pas.
-        </p>
-        <div className="mt-8 flex flex-col gap-3 sm:flex-row">
-          <Link
-            href="/inscription"
-            className="inline-flex items-center justify-center gap-2 rounded-[var(--radius-md)] bg-primary px-6 py-3 font-medium hover:bg-primary-600"
-          >
-            Essayer gratuitement <ArrowRight size={18} />
-          </Link>
-          <Link
-            href="/fonctionnalites"
-            className="inline-flex items-center justify-center rounded-[var(--radius-md)] border border-white/20 px-6 py-3 font-medium text-white/90 hover:bg-white/5"
-          >
-            Découvrir les fonctionnalités
-          </Link>
-        </div>
-        <p className="mt-4 text-sm text-white/40">30 jours d&apos;essai · sans carte bancaire · résiliable à tout moment.</p>
+      {/* ---------- HERO ---------- */}
+      <section className="mx-auto max-w-6xl px-5 pb-16 pt-12 sm:pt-16">
+        <div className="grid items-center gap-12 lg:grid-cols-2 lg:gap-10">
+          <div>
+            <span className="inline-flex items-center gap-1.5 rounded-full border border-bordure bg-white px-3 py-1.5 text-xs font-medium text-violet">
+              <Sparkles size={13} /> Pensé pour les professionnelles de la beauté
+            </span>
+            <h1 className="mt-5 font-serif text-4xl font-medium leading-[1.1] text-prune sm:text-5xl lg:text-[3.4rem]">
+              Votre activité beauté, enfin simple à gérer.
+            </h1>
+            <p className="mt-5 max-w-md text-lg leading-relaxed text-taupe">
+              Agenda intelligent, dossiers clients, acomptes et suivi métier réunis dans un
+              seul espace.
+            </p>
+            <div className="mt-8 flex flex-col gap-3 sm:flex-row">
+              <Link
+                href="/inscription"
+                className="inline-flex h-12 items-center justify-center gap-2 rounded-full bg-violet px-6 font-semibold text-white shadow-[0_10px_24px_-8px_rgb(118_86_201_/_0.65)] transition-colors hover:bg-violet-600"
+              >
+                Démarrer gratuitement <ArrowRight size={18} />
+              </Link>
+              <Link
+                href="#apercu"
+                className="inline-flex h-12 items-center justify-center rounded-full border border-bordure bg-white px-6 font-semibold text-prune transition-colors hover:border-violet/40"
+              >
+                Découvrir l&apos;interface
+              </Link>
+            </div>
+            <p className="mt-4 text-sm text-taupe">
+              30 jours gratuits · Sans carte bancaire · Configuration rapide
+            </p>
+          </div>
 
-        <div className="mt-16 grid gap-4 sm:grid-cols-3">
-          <Atout icone={<BellRing className="text-lavande" />} titre="Anti no-show" texte="Rappels bidirectionnels, acompte et score de fiabilité. Fini les créneaux perdus." />
-          <Atout icone={<CalendarCheck className="text-lavande" />} titre="Adapté à votre métier" texte="Votre espace se configure selon votre activité : vocabulaire, modules, catalogue." />
-          <Atout icone={<ShieldCheck className="text-lavande" />} titre="Conforme" texte="Traçabilité pigments, consentements signés, dossier prêt contrôle pour le PMU." />
-        </div>
-      </section>
-
-      {/* Anti no-show en avant */}
-      <section className="border-y border-white/10 bg-white/[0.03]">
-        <div className="mx-auto max-w-6xl px-5 py-16">
-          <p className="text-sm font-semibold uppercase tracking-wide text-lavande">L&apos;argument qui fait signer</p>
-          <h2 className="mt-2 max-w-2xl font-heading text-3xl font-bold">
-            En finir avec les rendez-vous non honorés
-          </h2>
-          <div className="mt-8 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
-            <Etape n="1" titre="Rappels bidirectionnels" texte="La cliente confirme, annule ou décale en répondant OUI / NON." />
-            <Etape n="2" titre="Acompte" texte="Exigé automatiquement au-delà d'un certain risque, garanti par Stripe." />
-            <Etape n="3" titre="Score de fiabilité" texte="Chaque cliente a un score, visible de vous seule." />
-            <Etape n="4" titre="Liste d'attente" texte="Un créneau libéré est reproposé automatiquement." />
+          {/* Aperçu produit */}
+          <div id="apercu" className="relative scroll-mt-24">
+            <div
+              aria-hidden
+              className="absolute -inset-4 -z-10 rounded-[36px] bg-lavande-clair/70 sm:-inset-6"
+            />
+            <Reveal delay={80}>
+              <ApercuProduit />
+            </Reveal>
           </div>
         </div>
       </section>
 
-      {/* Métiers */}
-      <section className="mx-auto max-w-6xl px-5 py-16">
-        <h2 className="font-heading text-3xl font-bold">Un logiciel, votre métier</h2>
-        <p className="mt-2 max-w-xl text-white/60">
-          Revora se configure selon votre activité. Choisissez la vôtre :
-        </p>
-        <div className="mt-8 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
-          {METIERS_VITRINE.map((m) => (
-            <Link
-              key={m.slug}
-              href={`/metiers/${m.slug}`}
-              className="rounded-[var(--radius-lg)] border border-white/10 bg-white/5 p-4 transition-colors hover:border-lavande/50"
-            >
-              <p className="font-heading font-semibold">{m.nom}</p>
-              <p className="mt-1 text-sm text-white/50">{m.accroche}</p>
-            </Link>
+      {/* ---------- FONCTIONNALITÉS ---------- */}
+      <section className="mx-auto max-w-6xl px-5 py-16 sm:py-24">
+        <Reveal className="mx-auto max-w-2xl text-center">
+          <h2 className="font-serif text-3xl font-medium text-prune sm:text-4xl">
+            Tout ce qu&apos;il faut, sans complexité.
+          </h2>
+          <p className="mt-3 text-taupe">
+            Revora rassemble les outils essentiels de votre activité dans une interface claire.
+          </p>
+        </Reveal>
+
+        <div className="mt-12 grid grid-cols-2 gap-3 sm:gap-5 lg:grid-cols-4">
+          {FONCTIONS.map((f, i) => (
+            <Reveal key={f.titre} delay={i * 70} as="article">
+              <div className="group h-full rounded-[22px] border border-bordure bg-white p-5 transition-transform duration-300 hover:-translate-y-1 sm:p-6">
+                <span className="grid h-11 w-11 place-items-center rounded-[14px] bg-lavande-clair text-violet transition-colors group-hover:bg-violet group-hover:text-white">
+                  <f.icone size={20} />
+                </span>
+                <h3 className="mt-4 font-heading text-base font-semibold text-prune">
+                  {f.titre}
+                </h3>
+                <p className="mt-1.5 text-sm leading-relaxed text-taupe">{f.texte}</p>
+              </div>
+            </Reveal>
           ))}
         </div>
       </section>
 
-      {/* Témoignages */}
-      <section className="border-t border-white/10 bg-white/[0.03]">
-        <div className="mx-auto max-w-6xl px-5 py-16">
-          <div className="grid gap-4 sm:grid-cols-3">
-            <Temoignage texte="Je ne cours plus après les confirmations. Les rappels font le travail." auteur="Léa, prothésiste ongulaire" />
-            <Temoignage texte="Le dossier prêt contrôle justifie l'abonnement à lui seul." auteur="Nadia, dermographe" />
-            <Temoignage texte="L'historique des formules couleur, enfin. Un gain de temps énorme." auteur="Camille, coiffeuse" />
+      {/* ---------- LISTE D'ATTENTE INTELLIGENTE ---------- */}
+      <section className="border-y border-bordure bg-lavande-clair/40">
+        <div className="mx-auto max-w-6xl px-5 py-16 sm:py-24">
+          <div className="grid items-center gap-12 lg:grid-cols-2">
+            <Reveal>
+              <span className="inline-flex items-center gap-1.5 rounded-full bg-white px-3 py-1.5 text-xs font-medium text-violet">
+                <Sparkles size={13} /> Liste d&apos;attente intelligente
+              </span>
+              <h2 className="mt-5 font-serif text-3xl font-medium leading-tight text-prune sm:text-4xl">
+                Un créneau se libère. Revora cherche la bonne cliente.
+              </h2>
+              <p className="mt-4 max-w-md leading-relaxed text-taupe">
+                Lorsqu&apos;un rendez-vous est annulé, Revora identifie les clientes compatibles
+                selon la prestation, leurs disponibilités et leur délai de déplacement.
+              </p>
+              <ol className="mt-8 flex flex-col gap-5">
+                {ETAPES.map((e) => (
+                  <li key={e.n} className="flex gap-4">
+                    <span className="grid h-8 w-8 shrink-0 place-items-center rounded-full bg-violet text-sm font-bold text-white">
+                      {e.n}
+                    </span>
+                    <div>
+                      <p className="font-heading text-sm font-semibold text-prune">{e.titre}</p>
+                      <p className="mt-0.5 text-sm leading-relaxed text-taupe">{e.texte}</p>
+                    </div>
+                  </li>
+                ))}
+              </ol>
+            </Reveal>
+
+            <Reveal delay={100}>
+              <ListeAttenteDemo />
+            </Reveal>
           </div>
         </div>
       </section>
 
-      {/* CTA final */}
-      <section className="mx-auto max-w-6xl px-5 py-20 text-center">
-        <h2 className="font-heading text-3xl font-bold sm:text-4xl">Prête à remplir votre agenda ?</h2>
-        <p className="mx-auto mt-3 max-w-lg text-white/60">
-          Essai gratuit de 30 jours. Configurez votre espace en moins de 10 minutes.
-        </p>
-        <Link
-          href="/inscription"
-          className="mt-6 inline-flex items-center gap-2 rounded-[var(--radius-md)] bg-primary px-6 py-3 font-medium hover:bg-primary-600"
-        >
-          Commencer maintenant <ArrowRight size={18} />
-        </Link>
+      {/* ---------- MÉTIERS ---------- */}
+      <section className="mx-auto max-w-6xl px-5 py-16 sm:py-24">
+        <Reveal className="mx-auto max-w-2xl text-center">
+          <h2 className="font-serif text-3xl font-medium text-prune sm:text-4xl">
+            Un logiciel qui s&apos;adapte à votre métier.
+          </h2>
+          <p className="mt-3 text-taupe">
+            Le même socle fiable, une configuration par activité. Choisissez la vôtre.
+          </p>
+        </Reveal>
+        <div className="mt-12">
+          <MetiersTabs />
+        </div>
+      </section>
+
+      {/* ---------- CTA FINAL ---------- */}
+      <section className="mx-auto max-w-6xl px-5 pb-20">
+        <Reveal>
+          <div className="rounded-[28px] bg-peche-clair px-6 py-14 text-center sm:px-10 sm:py-16">
+            <h2 className="mx-auto max-w-lg font-serif text-3xl font-medium text-prune sm:text-4xl">
+              Prête à simplifier votre quotidien ?
+            </h2>
+            <p className="mx-auto mt-3 max-w-md text-taupe">
+              Configurez votre espace Revora en quelques minutes.
+            </p>
+            <Link
+              href="/inscription"
+              className="mt-8 inline-flex h-12 items-center justify-center gap-2 rounded-full bg-violet px-7 font-semibold text-white shadow-[0_10px_24px_-8px_rgb(118_86_201_/_0.65)] transition-colors hover:bg-violet-600"
+            >
+              Commencer gratuitement <ArrowRight size={18} />
+            </Link>
+            <p className="mt-4 text-sm text-taupe">30 jours gratuits · Sans carte bancaire</p>
+          </div>
+        </Reveal>
       </section>
     </>
-  );
-}
-
-function Atout({ icone, titre, texte }: { icone: React.ReactNode; titre: string; texte: string }) {
-  return (
-    <div className="rounded-[var(--radius-lg)] border border-white/10 bg-white/5 p-5">
-      <div className="mb-3">{icone}</div>
-      <h3 className="font-heading font-semibold">{titre}</h3>
-      <p className="mt-1 text-sm text-white/60">{texte}</p>
-    </div>
-  );
-}
-
-function Etape({ n, titre, texte }: { n: string; titre: string; texte: string }) {
-  return (
-    <div>
-      <div className="flex h-8 w-8 items-center justify-center rounded-full bg-primary text-sm font-bold">{n}</div>
-      <h3 className="mt-3 font-heading font-semibold">{titre}</h3>
-      <p className="mt-1 text-sm text-white/60">{texte}</p>
-    </div>
-  );
-}
-
-function Temoignage({ texte, auteur }: { texte: string; auteur: string }) {
-  return (
-    <figure className="rounded-[var(--radius-lg)] border border-white/10 bg-white/5 p-5">
-      <div className="mb-2 flex gap-0.5 text-lavande">
-        {Array.from({ length: 5 }).map((_, i) => (
-          <Star key={i} size={14} fill="currentColor" />
-        ))}
-      </div>
-      <blockquote className="text-sm text-white/80">« {texte} »</blockquote>
-      <figcaption className="mt-3 text-xs text-white/40">{auteur}</figcaption>
-    </figure>
   );
 }
